@@ -2,31 +2,47 @@ package com.moulamanager.api.controllers;
 
 import com.moulamanager.api.models.ProductModel;
 import com.moulamanager.api.repositories.ProductRepository;
-import lombok.NoArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.moulamanager.api.services.product.ProductService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/products")
-public class ProductController {
+public class ProductController extends AbstractController {
 
-    private final ProductRepository productRepository;
-    public ProductController(ProductRepository productRepository) {
-        this.productRepository = productRepository;
+    private final ProductService productService;
+
+    public ProductController(ProductService productService) {
+        this.productService = productService;
     }
+
     @GetMapping("/all")
-    public List<ProductModel> getProducts() {
-        return productRepository.findAll();
+    public ResponseEntity<List<ProductModel>> getAllProducts() {
+        return ResponseEntity.ok(productService.findAll());
     }
 
     @GetMapping("/{id}")
-    public Optional<ProductModel> getProductById(@PathVariable long id) {
-        return productRepository.findById(id);
+    public ResponseEntity<ProductModel> getProductById(@PathVariable long id) {
+        return ResponseEntity.ok(productService.findById(id));
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<ProductModel> createProduct(@RequestBody ProductModel product) {
+        return ResponseEntity.ok(productService.save(product));
+    }
+
+    @PatchMapping("/update/{id}")
+    public ResponseEntity<ProductModel> updateProduct(@PathVariable long id, @RequestBody ProductModel product) {
+        product.setId(id);
+        return ResponseEntity.ok(productService.update(product));
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable long id) {
+        productService.delete(id);
+        return ResponseEntity.ok().build();
     }
 
 }
