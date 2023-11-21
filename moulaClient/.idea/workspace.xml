@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="66767778-0751-4124-8f44-9225ccde122f" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../client/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../client/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/androidApp/build.gradle.kts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/androidApp/src/main/AndroidManifest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/androidApp/src/main/java/org/moulamanager/client/android/MainActivity.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/androidApp/src/main/java/org/moulamanager/client/android/MyApplicationTheme.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/androidApp/src/main/java/org/moulamanager/client/android/config/.gitkeep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/androidApp/src/main/java/org/moulamanager/client/android/features/auth/model/.gitkeep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/androidApp/src/main/java/org/moulamanager/client/android/features/auth/view/.gitkeep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/androidApp/src/main/java/org/moulamanager/client/android/features/auth/viewModel/.gitkeep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/androidApp/src/main/java/org/moulamanager/client/android/features/basket/model/.gitkeep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/androidApp/src/main/java/org/moulamanager/client/android/features/basket/view/.gitkeep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/androidApp/src/main/java/org/moulamanager/client/android/features/basket/viewModel/.gitkeep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/androidApp/src/main/java/org/moulamanager/client/android/features/checkout/model/.gitkeep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/androidApp/src/main/java/org/moulamanager/client/android/features/checkout/view/.gitkeep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/androidApp/src/main/java/org/moulamanager/client/android/features/checkout/viewModel/.gitkeep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/androidApp/src/main/java/org/moulamanager/client/android/features/scan/model/.gitkeep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/androidApp/src/main/java/org/moulamanager/client/android/features/scan/view/.gitkeep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/androidApp/src/main/java/org/moulamanager/client/android/features/scan/viewModel/.gitkeep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/androidApp/src/main/java/org/moulamanager/client/android/helpers/.gitkeep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/androidApp/src/main/java/org/moulamanager/client/android/services/.gitkeep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/androidApp/src/main/java/org/moulamanager/client/android/utils/.gitkeep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/androidApp/src/main/java/org/moulamanager/client/android/widget/.gitkeep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/androidApp/src/main/res/values/styles.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/build.gradle.kts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../client/gradle.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/gradle/libs.versions.toml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../client/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/gradlew.bat" beforeDir="false" afterPath="$PROJECT_DIR$/../client/gradlew.bat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/iosApp/iosApp.xcodeproj/project.pbxproj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/iosApp/iosApp.xcodeproj/project.xcworkspace/contents.xcworkspacedata" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/iosApp/iosApp.xcodeproj/project.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/iosApp/iosApp/Assets.xcassets/AccentColor.colorset/Contents.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/iosApp/iosApp/Assets.xcassets/AppIcon.appiconset/Contents.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/iosApp/iosApp/Assets.xcassets/Contents.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/iosApp/iosApp/ContentView.swift" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/iosApp/iosApp/Info.plist" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/iosApp/iosApp/Preview Content/Preview Assets.xcassets/Contents.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/iosApp/iosApp/iOSApp.swift" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/settings.gradle.kts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/shared/build.gradle.kts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/shared/src/androidMain/kotlin/org/moulamanager/client/Platform.android.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/shared/src/commonMain/kotlin/org/moulamanager/client/Greeting.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/shared/src/commonMain/kotlin/org/moulamanager/client/Platform.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/shared/src/commonMain/kotlin/org/moulamanager/client/config/.gitkeep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/shared/src/commonMain/kotlin/org/moulamanager/client/features/auth/model/.gitkeep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/shared/src/commonMain/kotlin/org/moulamanager/client/features/auth/viewModel/.gitkeep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/shared/src/commonMain/kotlin/org/moulamanager/client/features/basket/model/.gitkeep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/shared/src/commonMain/kotlin/org/moulamanager/client/features/basket/model/Basket.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/shared/src/commonMain/kotlin/org/moulamanager/client/features/basket/viewModel/.gitkeep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/shared/src/commonMain/kotlin/org/moulamanager/client/features/checkout/model/.gitkeep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/shared/src/commonMain/kotlin/org/moulamanager/client/features/checkout/viewModel/.gitkeep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/shared/src/commonMain/kotlin/org/moulamanager/client/features/scan/model/.gitkeep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/shared/src/commonMain/kotlin/org/moulamanager/client/features/scan/viewModel/.gitkeep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/shared/src/commonMain/kotlin/org/moulamanager/client/helpers/.gitkeep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/shared/src/commonMain/kotlin/org/moulamanager/client/services/.gitkeep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/shared/src/commonMain/kotlin/org/moulamanager/client/utils/.gitkeep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/shared/src/commonMain/kotlin/org/moulamanager/client/widget/.gitkeep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/shared/src/iosMain/kotlin/org/moulamanager/client/Platform.ios.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/kotlinc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/proguard-rules.pro" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/androidTest/java/com/example/moulamanagerclient/ExampleInstrumentedTest.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/moulamanagerclient/MainActivity.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/moulamanagerclient/data/model/auth/LoginRequest.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/moulamanagerclient/data/model/auth/LoginResponse.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/moulamanagerclient/data/network/ApiHeader.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/moulamanagerclient/data/network/ApiService.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/moulamanagerclient/data/network/ApiURL.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/moulamanagerclient/data/repositories/auth/LoginRepository.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/moulamanagerclient/di/EmptyString.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/moulamanagerclient/ui/ViewModelFactory.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/moulamanagerclient/ui/login/LoginActivity.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/moulamanagerclient/ui/login/LoginViewModel.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/moulamanagerclient/ui/theme/Color.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/moulamanagerclient/ui/theme/Theme.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/moulamanagerclient/ui/theme/Type.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable/ic_launcher_background.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable/ic_launcher_foreground.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/mipmap-anydpi/ic_launcher.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/mipmap-anydpi/ic_launcher_round.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/mipmap-hdpi/ic_launcher.webp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/mipmap-hdpi/ic_launcher_round.webp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/mipmap-mdpi/ic_launcher.webp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/mipmap-mdpi/ic_launcher_round.webp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/mipmap-xhdpi/ic_launcher.webp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/mipmap-xhdpi/ic_launcher_round.webp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/mipmap-xxhdpi/ic_launcher.webp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.webp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/mipmap-xxxhdpi/ic_launcher.webp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.webp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/colors.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/themes.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/xml/backup_rules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/xml/data_extraction_rules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/test/java/com/example/moulamanagerclient/ExampleUnitTest.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradlew" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradlew.bat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/settings.gradle" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[/Users/danyleguy/.android/avd/Pixel_3a_API_33_arm64-v8a.avd]" />
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <expand />
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Kotlin File" />
+        <option value="Interface" />
+        <option value="Kotlin Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 4
+}]]></component>
+  <component name="ProjectId" id="2YTqGbQYUzq2vHSSbyE7YDGDZqx" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "android.gradle.sync.needed": "true",
+    "git-widget-placeholder": "hotfix/client/architectureSetup",
+    "last_opened_file_path": "/Users/danyleguy/Documents/Travail/EPITECH/MSc1/2.CashManager/MoulaManager/moulaClient/app/src/main/java/com/example/moulamanagerclient/ui/login",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "reference.settingsdialog.project.gradle",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/app/src/main/java/com/example/moulamanagerclient/ui/login" />
+    </key>
+    <key name="MoveKotlinTopLevelDeclarationsDialog.RECENTS_KEY">
+      <recent name="com.example.moulamanagerclient.data.model.auth" />
+    </key>
+    <key name="CopyKotlinDeclarationDialog.RECENTS_KEY">
+      <recent name="com.example.moulamanagerclient.data.model.auth" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Android App.app">
+    <configuration name="app" type="AndroidRunConfigurationType" factoryName="Android App">
+      <module name="moulamanagerclient.app.main" />
+      <option name="DEPLOY" value="true" />
+      <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
+      <option name="DEPLOY_AS_INSTANT" value="false" />
+      <option name="ARTIFACT_NAME" value="" />
+      <option name="PM_INSTALL_OPTIONS" value="" />
+      <option name="ALL_USERS" value="false" />
+      <option name="ALWAYS_INSTALL_WITH_PM" value="false" />
+      <option name="CLEAR_APP_STORAGE" value="false" />
+      <option name="ACTIVITY_EXTRA_FLAGS" value="" />
+      <option name="MODE" value="default_activity" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
+      <option name="INSPECTION_WITHOUT_ACTIVITY_RESTART" value="false" />
+      <option name="TARGET_SELECTION_MODE" value="DEVICE_AND_SNAPSHOT_COMBO_BOX" />
+      <option name="DEBUGGER_TYPE" value="Java" />
+      <Java>
+        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
+        <option name="DEBUG_SANDBOX_SDK" value="false" />
+      </Java>
+      <Profilers>
+        <option name="ADVANCED_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_CONFIGURATION_NAME" value="Java/Kotlin Method Sample (legacy)" />
+        <option name="STARTUP_NATIVE_MEMORY_PROFILING_ENABLED" value="false" />
+        <option name="NATIVE_MEMORY_SAMPLE_RATE_BYTES" value="2048" />
+      </Profilers>
+      <option name="DEEP_LINK" value="" />
+      <option name="ACTIVITY_CLASS" value="" />
+      <option name="SEARCH_ACTIVITY_IN_GLOBAL_SCOPE" value="false" />
+      <option name="SKIP_ACTIVITY_VALIDATION" value="false" />
+      <method v="2">
+        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="moulamanagerclient" type="AndroidRunConfigurationType" factoryName="Android App">
+      <module name="moulamanagerclient.app.main" />
+      <option name="DEPLOY" value="true" />
+      <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
+      <option name="DEPLOY_AS_INSTANT" value="false" />
+      <option name="ARTIFACT_NAME" value="" />
+      <option name="PM_INSTALL_OPTIONS" value="" />
+      <option name="ALL_USERS" value="false" />
+      <option name="ALWAYS_INSTALL_WITH_PM" value="false" />
+      <option name="CLEAR_APP_STORAGE" value="false" />
+      <option name="ACTIVITY_EXTRA_FLAGS" value="" />
+      <option name="MODE" value="default_activity" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
+      <option name="INSPECTION_WITHOUT_ACTIVITY_RESTART" value="false" />
+      <option name="TARGET_SELECTION_MODE" value="SHOW_DIALOG" />
+      <option name="DEBUGGER_TYPE" value="Java" />
+      <Java>
+        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
+        <option name="DEBUG_SANDBOX_SDK" value="false" />
+      </Java>
+      <Profilers>
+        <option name="ADVANCED_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_CONFIGURATION_NAME" value="Java/Kotlin Method Sample (legacy)" />
+        <option name="STARTUP_NATIVE_MEMORY_PROFILING_ENABLED" value="false" />
+        <option name="NATIVE_MEMORY_SAMPLE_RATE_BYTES" value="2048" />
+      </Profilers>
+      <option name="DEEP_LINK" value="" />
+      <option name="ACTIVITY_CLASS" value="" />
+      <option name="SEARCH_ACTIVITY_IN_GLOBAL_SCOPE" value="false" />
+      <option name="SKIP_ACTIVITY_VALIDATION" value="false" />
+      <method v="2">
+        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="GreetingPreview" type="ComposePreviewRunConfiguration" temporary="true">
+      <module name="moulamanagerclient.app" />
+      <option name="DEPLOY" value="true" />
+      <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
+      <option name="DEPLOY_AS_INSTANT" value="false" />
+      <option name="ARTIFACT_NAME" value="" />
+      <option name="PM_INSTALL_OPTIONS" value="" />
+      <option name="ALL_USERS" value="false" />
+      <option name="ALWAYS_INSTALL_WITH_PM" value="false" />
+      <option name="CLEAR_APP_STORAGE" value="false" />
+      <option name="ACTIVITY_EXTRA_FLAGS" value="--es composable com.example.moulamanagerclient.MainActivityKt.GreetingPreview" />
+      <option name="MODE" value="specific_activity" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
+      <option name="INSPECTION_WITHOUT_ACTIVITY_RESTART" value="false" />
+      <option name="TARGET_SELECTION_MODE" value="SHOW_DIALOG" />
+      <option name="DEBUGGER_TYPE" value="Java" />
+      <Java>
+        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
+        <option name="DEBUG_SANDBOX_SDK" value="false" />
+      </Java>
+      <Profilers>
+        <option name="ADVANCED_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_CONFIGURATION_NAME" value="Java/Kotlin Method Sample (legacy)" />
+        <option name="STARTUP_NATIVE_MEMORY_PROFILING_ENABLED" value="false" />
+        <option name="NATIVE_MEMORY_SAMPLE_RATE_BYTES" value="2048" />
+      </Profilers>
+      <option name="DEEP_LINK" value="" />
+      <option name="ACTIVITY_CLASS" value="androidx.compose.ui.tooling.PreviewActivity" />
+      <option name="SEARCH_ACTIVITY_IN_GLOBAL_SCOPE" value="true" />
+      <option name="SKIP_ACTIVITY_VALIDATION" value="false" />
+      <compose-preview-run-configuration composable-fqn="com.example.moulamanagerclient.MainActivityKt.GreetingPreview" />
+      <method v="2">
+        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="moulaClient [dependencies]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="dependencies" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Android App.app" />
+      <item itemvalue="Android App.moulamanagerclient" />
+      <item itemvalue="Compose Preview.GreetingPreview" />
+      <item itemvalue="Gradle.moulaClient [dependencies]" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Gradle.moulaClient [dependencies]" />
+        <item itemvalue="Compose Preview.GreetingPreview" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="66767778-0751-4124-8f44-9225ccde122f" name="Changes" comment="" />
+      <created>1700559821807</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1700559821807</updated>
+      <workItem from="1700559823640" duration="10281000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
