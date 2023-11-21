@@ -37,4 +37,10 @@ public class CartController {
         cart.setId(id);
         return ResponseEntity.ok(cartService.update(cart));
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteCart(@PathVariable long id) {
+        cartService.delete(id);
+        return ResponseEntity.ok().build();
+    }
 }
