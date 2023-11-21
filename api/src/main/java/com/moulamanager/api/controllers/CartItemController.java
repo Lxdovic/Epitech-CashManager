@@ -4,6 +4,7 @@ import com.moulamanager.api.models.CartItemModel;
 import com.moulamanager.api.services.cartItem.CartItemService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,4 +24,10 @@ public class CartItemController {
     public ResponseEntity<List<CartItemModel>> getAllCartItems() {
         return ResponseEntity.ok(cartItemService.findAll());
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<CartItemModel> getCartItemById(@PathVariable long id) {
+        return ResponseEntity.ok(cartItemService.findById(id));
+    }
+
 }
