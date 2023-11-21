@@ -19,5 +19,8 @@ public class CartItemController {
         this.cartItemService = cartItemService;
     }
 
-
+    @GetMapping
+    public ResponseEntity<List<CartItemModel>> getAllCartItems() {
+        return ResponseEntity.ok(cartItemService.findAll());
+    }
 }
