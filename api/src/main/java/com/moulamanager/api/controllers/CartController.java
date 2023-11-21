@@ -26,4 +26,9 @@ public class CartController {
     public ResponseEntity<CartModel> getCartById(@PathVariable long id) {
         return ResponseEntity.ok(cartService.findById(id));
     }
+
+    @PostMapping
+    public ResponseEntity<CartModel> createCart(@RequestBody CartModel cart) {
+        return ResponseEntity.ok(cartService.save(cart));
+    }
 }

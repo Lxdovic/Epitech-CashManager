@@ -2,8 +2,10 @@ package com.moulamanager.api.services.cart;
 
 import com.moulamanager.api.exceptions.cart.CartAlreadyExistsException;
 import com.moulamanager.api.exceptions.cart.CartNotFoundException;
+import com.moulamanager.api.exceptions.user.UserNotFoundException;
 import com.moulamanager.api.models.CartModel;
 import com.moulamanager.api.repositories.CartRepository;
+import com.moulamanager.api.repositories.UserRepository;
 import com.moulamanager.api.services.AbstractService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -14,10 +16,12 @@ import java.util.List;
 public class CartService extends AbstractService<CartModel> implements ICartService {
 
     private final CartRepository cartRepository;
+    private final UserRepository userRepository;
     private final String CART_NOT_FOUND = "Cart not found";
 
-    public CartService(CartRepository cartRepository) {
+    public CartService(CartRepository cartRepository, UserRepository userRepository) {
         this.cartRepository = cartRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -37,8 +41,10 @@ public class CartService extends AbstractService<CartModel> implements ICartServ
 
     @Override
     public CartModel save(CartModel cart) {
+        userRepository.findById(cart.getUser().getId())
+                .orElseThrow(() -> new UserNotFoundException("User with id " + cart.getUser().getId() + " not found"));
         if (cartRepository.existsByUserId(cart.getUser().getId())) {
-            throw new CartAlreadyExistsException("Cart already exists");
+            throw new CartAlreadyExistsException("User with id " + cart.getUser().getId() + " already has a cart");
         }
         return cartRepository.save(cart);
     }
