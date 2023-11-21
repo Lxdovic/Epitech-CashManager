@@ -51,9 +51,14 @@ public class CartService extends AbstractService<CartModel> implements ICartServ
 
     @Override
     public CartModel update(CartModel cart) {
-        CartModel cartModel = this.findByUserId(cart.getUser().getId());
-        cart.setUser(cartModel.getUser());
+        System.out.println(cart);
+        CartModel cartModel = cartRepository.findById(cart.getId())
+                .orElseThrow(() -> new CartNotFoundException(CART_NOT_FOUND));
         BeanUtils.copyProperties(cart, cartModel, getNullPropertyNames(cart));
+        if (cartRepository.existsByUserId(cart.getUser().getId())) {
+            throw new CartAlreadyExistsException("User with id " + cart.getUser().getId() + " already has a cart");
+        }
+
         return cartRepository.save(cartModel);
     }
 

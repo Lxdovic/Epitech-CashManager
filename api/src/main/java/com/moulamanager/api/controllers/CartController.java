@@ -31,4 +31,10 @@ public class CartController {
     public ResponseEntity<CartModel> createCart(@RequestBody CartModel cart) {
         return ResponseEntity.ok(cartService.save(cart));
     }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<CartModel> updateCart(@RequestBody CartModel cart, @PathVariable long id) {
+        cart.setId(id);
+        return ResponseEntity.ok(cartService.update(cart));
+    }
 }
