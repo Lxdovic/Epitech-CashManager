@@ -1,4 +1,4 @@
-package com.moulamanager.api.exception.product;
+package com.moulamanager.api.exceptions.product;
 
 public class ProductAlreadyExistsException extends RuntimeException{
     public ProductAlreadyExistsException(String message) {

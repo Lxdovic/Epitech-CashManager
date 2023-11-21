@@ -1,7 +1,7 @@
-package com.moulamanager.api.exception;
+package com.moulamanager.api.exceptions;
 
-import com.moulamanager.api.exception.product.ProductAlreadyExistsException;
-import com.moulamanager.api.exception.product.ProductNotFoundException;
+import com.moulamanager.api.exceptions.product.ProductAlreadyExistsException;
+import com.moulamanager.api.exceptions.product.ProductNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

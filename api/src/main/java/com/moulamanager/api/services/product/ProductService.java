@@ -1,18 +1,14 @@
 package com.moulamanager.api.services.product;
 
-import com.moulamanager.api.exception.product.ProductAlreadyExistsException;
-import com.moulamanager.api.exception.product.ProductNotFoundException;
+import com.moulamanager.api.exceptions.product.ProductAlreadyExistsException;
+import com.moulamanager.api.exceptions.product.ProductNotFoundException;
 import com.moulamanager.api.models.ProductModel;
 import com.moulamanager.api.repositories.ProductRepository;
 import com.moulamanager.api.services.AbstractService;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.BeanWrapper;
-import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.stereotype.Service;
 
-import java.beans.FeatureDescriptor;
 import java.util.List;
-import java.util.stream.Stream;
 
 @Service
 public class ProductService extends AbstractService<ProductModel> implements IProductService {
