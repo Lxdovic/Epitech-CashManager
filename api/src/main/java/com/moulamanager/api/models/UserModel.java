@@ -1,4 +1,5 @@
 package com.moulamanager.api.models;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -14,6 +15,7 @@ public class UserModel {
 
     private String username;
     private String email;
+    @JsonIgnore
     private String password;
 
     public UserModel(String username, String email, String password) {
