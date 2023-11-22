@@ -1,5 +1,6 @@
 package com.moulamanager.api.services.cart;
 
+import com.moulamanager.api.dto.CartCreationResultDTO;
 import com.moulamanager.api.models.CartModel;
 
 import java.util.List;
@@ -12,7 +13,7 @@ public interface ICartService {
 
     CartModel findByUserId(long userId);
 
-    CartModel save(CartModel cart);
+    CartCreationResultDTO save(CartModel cart);
 
     CartModel update(CartModel cart);
 
