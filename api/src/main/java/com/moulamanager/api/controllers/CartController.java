@@ -1,10 +1,13 @@
 package com.moulamanager.api.controllers;
 
+import com.moulamanager.api.dto.CartCreationResultDTO;
 import com.moulamanager.api.models.CartModel;
 import com.moulamanager.api.services.cart.CartService;
+import com.moulamanager.api.services.user.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -12,9 +15,11 @@ import java.util.List;
 public class CartController {
 
     private final CartService cartService;
+    private final UserService userService;
 
-    public CartController(CartService cartService) {
+    public CartController(CartService cartService, UserService userService) {
         this.cartService = cartService;
+        this.userService = userService;
     }
 
     @GetMapping
@@ -28,7 +33,11 @@ public class CartController {
     }
 
     @PostMapping
-    public ResponseEntity<CartModel> createCart(@RequestBody CartModel cart) {
+    public ResponseEntity<CartCreationResultDTO> createCart(@RequestParam long userId) {
+        CartModel cart = new CartModel();
+        cart.setUser(userService.findById(userId));
+        cart.setCreatedAt(new Date());
+        cart.setCheckedOut(false);
         return ResponseEntity.ok(cartService.save(cart));
     }
 
