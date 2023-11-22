@@ -1,7 +1,6 @@
 package com.moulamanager.api.models;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -24,7 +23,6 @@ public class CartModel {
 
     @OneToOne
     @JoinColumn(name = "user_id", unique = true)
-    @JsonIdentityReference(alwaysAsId = true)
     private UserModel user;
 
     @Temporal(TemporalType.TIMESTAMP)
