@@ -34,11 +34,7 @@ public class CartController {
 
     @PostMapping
     public ResponseEntity<CartCreationResultDTO> createCart(@RequestParam long userId) {
-        CartModel cart = new CartModel();
-        cart.setUser(userService.findById(userId));
-        cart.setCreatedAt(new Date());
-        cart.setCheckedOut(false);
-        return ResponseEntity.ok(cartService.save(cart));
+        return ResponseEntity.ok(cartService.save(userId));
     }
 
     @PatchMapping("/{id}")
