@@ -13,7 +13,7 @@ public interface ICartService {
 
     CartModel findByUserId(long userId);
 
-    CartCreationResultDTO save(CartModel cart);
+    CartCreationResultDTO save(long userId);
 
     CartModel update(CartModel cart);
 

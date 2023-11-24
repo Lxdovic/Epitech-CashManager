@@ -11,6 +11,7 @@ import com.moulamanager.api.services.AbstractService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -41,15 +42,22 @@ public class CartService extends AbstractService<CartModel> implements ICartServ
     }
 
     @Override
-    public CartCreationResultDTO save(CartModel cart) {
+    public CartCreationResultDTO save(long userId) {
+
+        CartModel cart = new CartModel();
+        cart.setUser(userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User with id " + userId + " not found")));
+        cart.setCreatedAt(new Date());
+        cart.setCheckedOut(false);
+
         userRepository.findById(cart.getUser().getId())
                 .orElseThrow(() -> new UserNotFoundException("User with id " + cart.getUser().getId() + " not found"));
+
         if (cartRepository.existsByUserId(cart.getUser().getId())) {
             throw new CartAlreadyExistsException("User with id " + cart.getUser().getId() + " already has a cart");
         }
-        CartModel savedCart =  cartRepository.save(cart);
 
-        return CartCreationResultDTO.fromCartModel(savedCart);
+        return CartCreationResultDTO.fromCartModel(cartRepository.save(cart));
     }
 
     @Override
