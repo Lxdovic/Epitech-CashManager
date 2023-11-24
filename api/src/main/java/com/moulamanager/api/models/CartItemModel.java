@@ -1,6 +1,5 @@
 package com.moulamanager.api.models;
 
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,14 +16,12 @@ public class CartItemModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "cart_id", unique = true)
-    @JsonIdentityReference(alwaysAsId = true)
+    @ManyToOne
+    @JoinColumn(name = "cart_id", referencedColumnName = "id")
     private CartModel cart;
 
-    @OneToOne
-    @JoinColumn(name = "product_id", unique = true)
-    @JsonIdentityReference(alwaysAsId = true)
+    @ManyToOne
+    @JoinColumn(name = "product_id", referencedColumnName = "id")
     private ProductModel product;
 
     private int quantity;
