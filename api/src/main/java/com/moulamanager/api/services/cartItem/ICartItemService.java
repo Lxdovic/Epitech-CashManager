@@ -1,5 +1,6 @@
 package com.moulamanager.api.services.cartItem;
 
+import com.moulamanager.api.dto.CartItemCreationResultDTO;
 import com.moulamanager.api.models.CartItemModel;
 
 import java.util.List;
@@ -13,6 +14,8 @@ public interface ICartItemService {
     CartItemModel findByCartId(long cartId);
 
     CartItemModel findByProductId(long productId);
+
+    CartItemCreationResultDTO addProductToCart(long productId, int quantity, String token);
 
     CartItemModel save(CartItemModel cartItem);
 
