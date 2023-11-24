@@ -7,11 +7,13 @@ import com.moulamanager.api.services.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 @Component
 public class JwtUtils {
@@ -23,10 +25,10 @@ public class JwtUtils {
     private final int jwtExpirationMs = 86400000;
 
     public String generateJwtToken(Authentication authentication) {
-
         UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
 
         return Jwts.builder()
+                .setId(Long.toString(userPrincipal.getId()))
                 .setSubject((userPrincipal.getUsername()))
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
@@ -41,6 +43,14 @@ public class JwtUtils {
     public String getUserNameFromJwtToken(String token) {
         return Jwts.parserBuilder().setSigningKey(key()).build()
                 .parseClaimsJws(token).getBody().getSubject();
+    }
+
+    public long getUserIdFromJwtToken(String token) {
+        if (StringUtils.hasText(token) && token.startsWith("Bearer ")) {
+            token = token.substring(7);
+        }
+        Claims claims = Jwts.parserBuilder().setSigningKey(key()).build().parseClaimsJws(token).getBody();
+        return Long.parseLong(claims.getId());
     }
 
     public boolean validateJwtToken(String authToken) {
