@@ -16,13 +16,13 @@ public interface ICartItemService {
 
     CartItemModel findByProductId(long productId);
 
-    CartItemModel findByCartIdAndProductId(long cartId, long productId);
+    CartItemResultDTO findByCartIdAndProductId(long cartId, long productId);
 
     CartItemResultDTO addProductToCart(long productId, String token);
 
     CartItemModel save(CartItemModel cartItem);
 
-    CartItemModel updateProductQuantity(long productId, UpdateCartItemQuantityDTO quantity, String token);
+    CartItemResultDTO updateProductQuantity(long productId, UpdateCartItemQuantityDTO quantity, String token);
 
     void delete(long id);
 

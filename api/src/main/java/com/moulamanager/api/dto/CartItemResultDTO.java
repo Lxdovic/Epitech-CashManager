@@ -21,4 +21,13 @@ public class CartItemResultDTO {
                 .quantity(cartItem.getQuantity())
                 .build();
     }
+
+    public static CartItemModel toCartItemModel(CartItemResultDTO cartItem) {
+        return CartItemModel.builder()
+                .id(cartItem.getId())
+                .cart(CartResultDTO.toCartModel(cartItem.getCart()))
+                .product(cartItem.getProduct())
+                .quantity(cartItem.getQuantity())
+                .build();
+    }
 }

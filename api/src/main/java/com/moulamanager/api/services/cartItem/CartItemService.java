@@ -59,8 +59,8 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
     }
 
     @Override
-    public CartItemModel findByCartIdAndProductId(long cartId, long productId) {
-        return cartItemRepository.findByCartIdAndProductId(cartId, productId).orElseThrow(() -> new CartItemNotFoundException(CART_ITEM_NOT_FOUND));
+    public CartItemResultDTO findByCartIdAndProductId(long cartId, long productId) {
+        return CartItemResultDTO.fromCartItemModel(cartItemRepository.findByCartIdAndProductId(cartId, productId).orElseThrow(() -> new CartItemNotFoundException(CART_ITEM_NOT_FOUND)));
     }
 
     /**
@@ -109,13 +109,13 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
      * @return The updated cart item
      */
     @Override
-    public CartItemModel updateProductQuantity(long productId, UpdateCartItemQuantityDTO quantity, String userToken) {
+    public CartItemResultDTO updateProductQuantity(long productId, UpdateCartItemQuantityDTO quantity, String userToken) {
 
         validateQuantity(quantity.getQuantity());
         long userId = jwtUtils.getUserIdFromJwtToken(userToken);
         UserModel user = findUserById(userId);
         CartResultDTO cart = findCartByUserIdAndNotCheckedOut(user);
-        CartItemModel cartItem = findByCartIdAndProductId(cart.getId(), productId);
+        CartItemResultDTO cartItem = findByCartIdAndProductId(cart.getId(), productId);
         checkIfSameQuantity(quantity.getQuantity(), cartItem);
         updateCartItemQuantity(cartItem, quantity.getQuantity());
         return cartItem;
@@ -135,7 +135,7 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
         }
     }
 
-    private void checkIfSameQuantity(int quantity, CartItemModel cartItem) {
+    private void checkIfSameQuantity(int quantity, CartItemResultDTO cartItem) {
         if (cartItem.getQuantity() == quantity) {
             throw new IllegalArgumentException("Quantity is same as previous quantity");
         }
@@ -171,14 +171,14 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
     private CartItemModel createNewCartItem(ProductModel product, CartResultDTO cart) {
         CartItemModel newCartItem = new CartItemModel();
         newCartItem.setProduct(product);
-        newCartItem.setCart(CartResultDTO.toCartModel(cart, userService.findById(cart.getUserId())));
+        newCartItem.setCart(CartResultDTO.toCartModel(cart));
         newCartItem.setQuantity(1);
         return cartItemRepository.save(newCartItem);
     }
 
-    private void updateCartItemQuantity(CartItemModel cartItem, int quantity) {
+    private void updateCartItemQuantity(CartItemResultDTO cartItem, int quantity) {
         cartItem.setQuantity(quantity);
-        cartItemRepository.save(cartItem);
+        cartItemRepository.save(CartItemResultDTO.toCartItemModel(cartItem));
     }
 
     private CartItemResultDTO createCartItemCreationResultDTO(CartItemModel cartItem) {

@@ -30,10 +30,10 @@ public class CartResultDTO {
         return carts.stream().map(CartResultDTO::fromCartModel).collect(Collectors.toList());
     }
 
-    public static CartModel toCartModel(CartResultDTO cartResultDTO, UserModel user) {
+    public static CartModel toCartModel(CartResultDTO cartResultDTO) {
         return CartModel.builder()
                 .id(cartResultDTO.getId())
-                .user(user)
+                .user(UserModel.builder().id(cartResultDTO.getUserId()).build())
                 .createdAt(cartResultDTO.getCreatedAt())
                 .checkedOut(cartResultDTO.isCheckedOut())
                 .build();

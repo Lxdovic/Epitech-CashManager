@@ -85,7 +85,7 @@ public class CartItemController {
      * @return A {@link ResponseEntity} containing the {@link CartItemModel} of the updated product.
      */
     @PatchMapping("/{productId}")
-    public ResponseEntity<CartItemModel> updateProductQuantity(@PathVariable long productId, @RequestBody UpdateCartItemQuantityDTO quantity, @RequestHeader("Authorization") String userToken) {
+    public ResponseEntity<CartItemResultDTO> updateProductQuantity(@PathVariable long productId, @RequestBody UpdateCartItemQuantityDTO quantity, @RequestHeader("Authorization") String userToken) {
         return ResponseEntity.ok(cartItemService.updateProductQuantity(productId, quantity, userToken));
     }
 

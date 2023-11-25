@@ -10,6 +10,7 @@ import lombok.*;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Table(name = "users", uniqueConstraints = { @UniqueConstraint(columnNames = "email") })
 public class UserModel {
     @Id
