@@ -1,10 +1,11 @@
 package com.moulamanager.api.services.cart;
 
-import com.moulamanager.api.dto.CartCreationResultDTO;
+import com.moulamanager.api.dto.CartResultDTO;
 import com.moulamanager.api.exceptions.cart.CartAlreadyExistsException;
 import com.moulamanager.api.exceptions.cart.CartNotFoundException;
 import com.moulamanager.api.exceptions.user.UserNotFoundException;
 import com.moulamanager.api.models.CartModel;
+import com.moulamanager.api.models.UserModel;
 import com.moulamanager.api.repositories.CartRepository;
 import com.moulamanager.api.repositories.UserRepository;
 import com.moulamanager.api.services.AbstractService;
@@ -27,50 +28,43 @@ public class CartService extends AbstractService<CartModel> implements ICartServ
     }
 
     @Override
-    public List<CartModel> findAll() {
-        return cartRepository.findAll();
+    public List<CartResultDTO> findAll() {
+        return CartResultDTO.fromCartModelList(cartRepository.findAll());
     }
 
     @Override
-    public CartModel findById(long id) {
-        return cartRepository.findById(id).orElseThrow(() -> new CartNotFoundException(CART_NOT_FOUND));
+    public CartResultDTO findById(long id) {
+        return CartResultDTO.fromCartModel(cartRepository.findById(id).orElseThrow(() -> new CartNotFoundException(CART_NOT_FOUND)));
     }
 
     @Override
-    public CartModel findByUserId(long userId) {
-        return cartRepository.findByUserId(userId).orElseThrow(() -> new CartNotFoundException(CART_NOT_FOUND));
+    public CartResultDTO findByUserId(long userId) {
+        return CartResultDTO.fromCartModel(cartRepository.findByUserId(userId).orElseThrow(() -> new CartNotFoundException(CART_NOT_FOUND)));
     }
 
     @Override
-    public CartCreationResultDTO save(long userId) {
-
-        CartModel cart = new CartModel();
-        cart.setUser(userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("User with id " + userId + " not found")));
-        cart.setCreatedAt(new Date());
-        cart.setCheckedOut(false);
-
-        userRepository.findById(cart.getUser().getId())
-                .orElseThrow(() -> new UserNotFoundException("User with id " + cart.getUser().getId() + " not found"));
-
-        if (cartRepository.existsByUserId(cart.getUser().getId())) {
-            throw new CartAlreadyExistsException("User with id " + cart.getUser().getId() + " already has a cart");
-        }
-
-        return CartCreationResultDTO.fromCartModel(cartRepository.save(cart));
+    public CartResultDTO findByUserIdAndCheckedOut(long userId, boolean checkedOut) {
+        return CartResultDTO.fromCartModel(cartRepository.findByUserIdAndCheckedOut(userId, checkedOut).orElseThrow(() -> new CartNotFoundException(CART_NOT_FOUND)));
     }
 
     @Override
-    public CartModel update(CartModel cart) {
-        System.out.println(cart);
-        CartModel cartModel = cartRepository.findById(cart.getId())
-                .orElseThrow(() -> new CartNotFoundException(CART_NOT_FOUND));
+    public CartResultDTO save(long userId) {
+        UserModel user = findUserById(userId);
+        validateCartExistence(userId);
+
+        CartModel newCart = createNewCart(user);
+        return CartResultDTO.fromCartModel(cartRepository.save(newCart));
+    }
+
+    @Override
+    public CartResultDTO update(CartModel cart) {
+        CartModel cartModel = cartRepository.findById(cart.getId()).orElseThrow(() -> new CartNotFoundException(CART_NOT_FOUND));
         BeanUtils.copyProperties(cart, cartModel, getNullPropertyNames(cart));
         if (cartRepository.existsByUserId(cart.getUser().getId())) {
-            throw new CartAlreadyExistsException("User with id " + cart.getUser().getId() + " already has a cart");
+            throw new CartAlreadyExistsException("User with id " + cart.getUser().getId() + " already has an active cart");
         }
 
-        return cartRepository.save(cartModel);
+        return CartResultDTO.fromCartModel(cartRepository.save(cartModel));
     }
 
     @Override
@@ -79,5 +73,26 @@ public class CartService extends AbstractService<CartModel> implements ICartServ
             throw new CartNotFoundException(CART_NOT_FOUND);
         }
         cartRepository.deleteById(id);
+    }
+
+    private UserModel findUserById(long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User with id " + userId + " not found"));
+    }
+
+    private void validateCartExistence(long userId) {
+        cartRepository.findByUserIdAndCheckedOut(userId, false)
+                .filter(c -> !c.isCheckedOut())
+                .ifPresent(c -> {
+                    throw new CartAlreadyExistsException("User with id " + userId + " already has an active cart");
+                });
+    }
+
+    private CartModel createNewCart(UserModel user) {
+        CartModel newCart = new CartModel();
+        newCart.setUser(user);
+        newCart.setCheckedOut(false);
+        newCart.setCreatedAt(new Date());
+        return newCart;
     }
 }

@@ -1,13 +1,12 @@
 package com.moulamanager.api.services.cartItem;
 
-import com.moulamanager.api.dto.CartCreationResultDTO;
+import com.moulamanager.api.dto.CartResultDTO;
 import com.moulamanager.api.dto.CartItemResultDTO;
 import com.moulamanager.api.dto.UpdateCartItemQuantityDTO;
 import com.moulamanager.api.exceptions.cart.CartNotFoundException;
 import com.moulamanager.api.exceptions.cartItem.CartItemAlreadyExistsException;
 import com.moulamanager.api.exceptions.cartItem.CartItemNotFoundException;
 import com.moulamanager.api.models.CartItemModel;
-import com.moulamanager.api.models.CartModel;
 import com.moulamanager.api.models.ProductModel;
 import com.moulamanager.api.models.UserModel;
 import com.moulamanager.api.repositories.CartItemRepository;
@@ -16,7 +15,6 @@ import com.moulamanager.api.services.cart.CartService;
 import com.moulamanager.api.services.jwt.JwtUtils;
 import com.moulamanager.api.services.product.ProductService;
 import com.moulamanager.api.services.user.UserService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -69,6 +67,7 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
      * Add a product to the cart of the user with the given token
      * If the user doesn't have a cart, create a new one
      * If the product already exists in the cart, throw an exception
+     *
      * @param productId The id of the product to add to the cart
      * @param userToken The token of the user
      * @return The created cart item
@@ -78,9 +77,9 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
         long userId = jwtUtils.getUserIdFromJwtToken(userToken);
         UserModel user = findUserById(userId);
         ProductModel product = findProductById(productId);
-        CartModel cart;
+        CartResultDTO cart;
         try {
-            cart = findCartByUserId(user);
+            cart = findCartByUserIdAndNotCheckedOut(user);
         } catch (CartNotFoundException e) {
             cart = createAndSaveNewCart(user);
         }
@@ -103,18 +102,21 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
      * Update the quantity of the cart item with the given product id
      * If the cart item doesn't exist, throw an exception
      * If the quantity is less than or equal to 0, throw an exception
+     *
      * @param productId The id of the product to update
-     * @param quantity The new quantity
+     * @param quantity  The new quantity
      * @param userToken The token of the user
      * @return The updated cart item
      */
     @Override
     public CartItemModel updateProductQuantity(long productId, UpdateCartItemQuantityDTO quantity, String userToken) {
+
         validateQuantity(quantity.getQuantity());
         long userId = jwtUtils.getUserIdFromJwtToken(userToken);
         UserModel user = findUserById(userId);
-        CartModel cart = findCartByUserId(user);
+        CartResultDTO cart = findCartByUserIdAndNotCheckedOut(user);
         CartItemModel cartItem = findByCartIdAndProductId(cart.getId(), productId);
+        checkIfSameQuantity(quantity.getQuantity(), cartItem);
         updateCartItemQuantity(cartItem, quantity.getQuantity());
         return cartItem;
     }
@@ -133,6 +135,12 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
         }
     }
 
+    private void checkIfSameQuantity(int quantity, CartItemModel cartItem) {
+        if (cartItem.getQuantity() == quantity) {
+            throw new IllegalArgumentException("Quantity is same as previous quantity");
+        }
+    }
+
     // Find a way to use this method on every service without having to copy and paste it nor having to create an interface/abstract class, so we don't need to inject the JwtUtils on every service
     /*private long getUserIdFromToken(String token) {
         return jwtUtils.getUserIdFromJwtToken(token);
@@ -146,26 +154,26 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
         return productService.findById(productId);
     }
 
-    private CartModel findCartByUserId(UserModel user) {
-        return cartService.findByUserId(user.getId());
+    private CartResultDTO findCartByUserIdAndNotCheckedOut(UserModel user) {
+        return cartService.findByUserIdAndCheckedOut(user.getId(), false);
     }
 
-    private CartModel createAndSaveNewCart(UserModel user) {
-        CartCreationResultDTO cartCreationResultDTO = cartService.save(user.getId());
+    private CartResultDTO createAndSaveNewCart(UserModel user) {
+        CartResultDTO cartCreationResultDTO = cartService.save(user.getId());
         return cartService.findById(cartCreationResultDTO.getId());
     }
 
-    private CartItemModel getOrCreateCartItemForProductInCart(ProductModel product, CartModel cart) {
+    private CartItemModel getOrCreateCartItemForProductInCart(ProductModel product, CartResultDTO cart) {
         return cartItemRepository.findByCartIdAndProductId(cart.getId(), product.getId())
                 .orElseGet(() -> createNewCartItem(product, cart));
     }
 
-    private CartItemModel createNewCartItem(ProductModel product, CartModel cart) {
+    private CartItemModel createNewCartItem(ProductModel product, CartResultDTO cart) {
         CartItemModel newCartItem = new CartItemModel();
         newCartItem.setProduct(product);
-        newCartItem.setCart(cart);
+        newCartItem.setCart(CartResultDTO.toCartModel(cart, userService.findById(cart.getUserId())));
         newCartItem.setQuantity(1);
-        return newCartItem;
+        return cartItemRepository.save(newCartItem);
     }
 
     private void updateCartItemQuantity(CartItemModel cartItem, int quantity) {

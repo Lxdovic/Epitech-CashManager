@@ -1,0 +1,41 @@
+package com.moulamanager.api.dto;
+
+import com.moulamanager.api.models.CartModel;
+import com.moulamanager.api.models.UserModel;
+import lombok.Builder;
+import lombok.Data;
+
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Data
+@Builder
+public class CartResultDTO {
+    private long id;
+    private long userId;
+    private Date createdAt;
+    private boolean checkedOut;
+
+    public static CartResultDTO fromCartModel(CartModel cart) {
+        return CartResultDTO.builder()
+                .id(cart.getId())
+                .userId(cart.getUser().getId())
+                .createdAt(cart.getCreatedAt())
+                .checkedOut(cart.isCheckedOut())
+                .build();
+    }
+
+    public static List<CartResultDTO> fromCartModelList(List<CartModel> carts) {
+        return carts.stream().map(CartResultDTO::fromCartModel).collect(Collectors.toList());
+    }
+
+    public static CartModel toCartModel(CartResultDTO cartResultDTO, UserModel user) {
+        return CartModel.builder()
+                .id(cartResultDTO.getId())
+                .user(user)
+                .createdAt(cartResultDTO.getCreatedAt())
+                .checkedOut(cartResultDTO.isCheckedOut())
+                .build();
+    }
+}

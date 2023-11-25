@@ -1,21 +1,23 @@
 package com.moulamanager.api.services.cart;
 
-import com.moulamanager.api.dto.CartCreationResultDTO;
+import com.moulamanager.api.dto.CartResultDTO;
 import com.moulamanager.api.models.CartModel;
 
 import java.util.List;
 
 public interface ICartService {
 
-    List<CartModel> findAll();
+    List<CartResultDTO> findAll();
 
-    CartModel findById(long id);
+    CartResultDTO findById(long id);
 
-    CartModel findByUserId(long userId);
+    CartResultDTO findByUserId(long userId);
 
-    CartCreationResultDTO save(long userId);
+    CartResultDTO findByUserIdAndCheckedOut(long userId, boolean checkedOut);
 
-    CartModel update(CartModel cart);
+    CartResultDTO save(long userId);
+
+    CartResultDTO update(CartModel cart);
 
     void delete(long id);
 }
