@@ -2,6 +2,7 @@ package com.moulamanager.api.services.cartItem;
 
 import com.moulamanager.api.dto.CartCreationResultDTO;
 import com.moulamanager.api.dto.CartItemResultDTO;
+import com.moulamanager.api.dto.UpdateCartItemQuantityDTO;
 import com.moulamanager.api.exceptions.cart.CartNotFoundException;
 import com.moulamanager.api.exceptions.cartItem.CartItemAlreadyExistsException;
 import com.moulamanager.api.exceptions.cartItem.CartItemNotFoundException;
@@ -60,8 +61,21 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
     }
 
     @Override
-    public CartItemResultDTO addProductToCart(long productId, String token) {
-        long userId = jwtUtils.getUserIdFromJwtToken(token);
+    public CartItemModel findByCartIdAndProductId(long cartId, long productId) {
+        return cartItemRepository.findByCartIdAndProductId(cartId, productId).orElseThrow(() -> new CartItemNotFoundException(CART_ITEM_NOT_FOUND));
+    }
+
+    /**
+     * Add a product to the cart of the user with the given token
+     * If the user doesn't have a cart, create a new one
+     * If the product already exists in the cart, throw an exception
+     * @param productId The id of the product to add to the cart
+     * @param userToken The token of the user
+     * @return The created cart item
+     */
+    @Override
+    public CartItemResultDTO addProductToCart(long productId, String userToken) {
+        long userId = jwtUtils.getUserIdFromJwtToken(userToken);
         UserModel user = findUserById(userId);
         ProductModel product = findProductById(productId);
         CartModel cart;
@@ -74,7 +88,7 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
         if (cartItemRepository.existsByCartIdAndProductId(cart.getId(), productId)) {
             throw new CartItemAlreadyExistsException("Product with id " + productId + " already exists in cart with id " + cart.getId());
         }
-        
+
         CartItemModel cartItem = getOrCreateCartItemForProductInCart(product, cart);
         return createCartItemCreationResultDTO(cartItem);
     }
@@ -85,13 +99,24 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
         return cartItemRepository.save(cartItem);
     }
 
+    /**
+     * Update the quantity of the cart item with the given product id
+     * If the cart item doesn't exist, throw an exception
+     * If the quantity is less than or equal to 0, throw an exception
+     * @param productId The id of the product to update
+     * @param quantity The new quantity
+     * @param userToken The token of the user
+     * @return The updated cart item
+     */
     @Override
-    public CartItemModel update(CartItemModel cartItem) {
-        CartItemModel cartItemModel = cartItemRepository.findById(cartItem.getId())
-                .orElseThrow(() -> new CartItemNotFoundException(CART_ITEM_NOT_FOUND));
-        BeanUtils.copyProperties(cartItem, cartItemModel, getNullPropertyNames(cartItem));
-        findProductById(cartItem.getProduct().getId());
-        return cartItemRepository.save(cartItemModel);
+    public CartItemModel updateProductQuantity(long productId, UpdateCartItemQuantityDTO quantity, String userToken) {
+        validateQuantity(quantity.getQuantity());
+        long userId = jwtUtils.getUserIdFromJwtToken(userToken);
+        UserModel user = findUserById(userId);
+        CartModel cart = findCartByUserId(user);
+        CartItemModel cartItem = findByCartIdAndProductId(cart.getId(), productId);
+        updateCartItemQuantity(cartItem, quantity.getQuantity());
+        return cartItem;
     }
 
     @Override
