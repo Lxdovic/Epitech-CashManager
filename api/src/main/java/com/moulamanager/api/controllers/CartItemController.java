@@ -1,7 +1,7 @@
 package com.moulamanager.api.controllers;
 
 import com.moulamanager.api.dto.AddProductToCartRequestDTO;
-import com.moulamanager.api.dto.CartItemCreationResultDTO;
+import com.moulamanager.api.dto.CartItemResultDTO;
 import com.moulamanager.api.models.CartItemModel;
 import com.moulamanager.api.services.cartItem.CartItemService;
 import org.springframework.http.ResponseEntity;
@@ -31,8 +31,8 @@ public class CartItemController {
     }
 
     @PostMapping("/{productId}")
-    public ResponseEntity<CartItemCreationResultDTO> addProductToCart(@PathVariable long productId, @RequestBody AddProductToCartRequestDTO request, @RequestHeader("Authorization") String token) {
-        return ResponseEntity.ok(cartItemService.addProductToCart(productId, request.getQuantity(), token));
+    public ResponseEntity<CartItemResultDTO> addProductToCart(@PathVariable long productId, @RequestHeader("Authorization") String token) {
+        return ResponseEntity.ok(cartItemService.addProductToCart(productId, token));
     }
 
 }

@@ -7,14 +7,14 @@ import lombok.Data;
 
 @Data
 @Builder
-public class CartItemCreationResultDTO {
+public class CartItemResultDTO {
     private long id;
     private CartCreationResultDTO cart;
     private ProductModel product;
     private int quantity;
 
-    public static CartItemCreationResultDTO fromCartItemModel(CartItemModel cartItem) {
-        return CartItemCreationResultDTO.builder()
+    public static CartItemResultDTO fromCartItemModel(CartItemModel cartItem) {
+        return CartItemResultDTO.builder()
                 .id(cartItem.getId())
                 .cart(CartCreationResultDTO.fromCartModel(cartItem.getCart()))
                 .product(cartItem.getProduct())

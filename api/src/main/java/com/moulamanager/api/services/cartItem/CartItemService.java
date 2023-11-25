@@ -1,7 +1,7 @@
 package com.moulamanager.api.services.cartItem;
 
 import com.moulamanager.api.dto.CartCreationResultDTO;
-import com.moulamanager.api.dto.CartItemCreationResultDTO;
+import com.moulamanager.api.dto.CartItemResultDTO;
 import com.moulamanager.api.exceptions.cart.CartNotFoundException;
 import com.moulamanager.api.exceptions.cartItem.CartItemNotFoundException;
 import com.moulamanager.api.models.CartItemModel;
@@ -59,8 +59,7 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
     }
 
     @Override
-    public CartItemCreationResultDTO addProductToCart(long productId, int quantity, String token) {
-        validateQuantity(quantity);
+    public CartItemResultDTO addProductToCart(long productId, String token) {
         long userId = jwtUtils.getUserIdFromJwtToken(token);
         UserModel user = findUserById(userId);
         ProductModel product = findProductById(productId);
@@ -70,9 +69,7 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
         } catch (CartNotFoundException e) {
             cart = createAndSaveNewCart(user);
         }
-        CartItemModel cartItem = getOrCreateCartItemForProductInCart(product, cart, quantity);
-        validateQuantityAgainstExisting(cartItem, quantity);
-        updateCartItemQuantity(cartItem, quantity);
+        CartItemModel cartItem = getOrCreateCartItemForProductInCart(product, cart);
         return createCartItemCreationResultDTO(cartItem);
     }
 
@@ -127,23 +124,17 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
         return cartService.findById(cartCreationResultDTO.getId());
     }
 
-    private CartItemModel getOrCreateCartItemForProductInCart(ProductModel product, CartModel cart, int quantity) {
+    private CartItemModel getOrCreateCartItemForProductInCart(ProductModel product, CartModel cart) {
         return cartItemRepository.findByCartIdAndProductId(cart.getId(), product.getId())
-                .orElseGet(() -> createNewCartItem(product, cart, quantity));
+                .orElseGet(() -> createNewCartItem(product, cart));
     }
 
-    private CartItemModel createNewCartItem(ProductModel product, CartModel cart, int quantity) {
+    private CartItemModel createNewCartItem(ProductModel product, CartModel cart) {
         CartItemModel newCartItem = new CartItemModel();
         newCartItem.setProduct(product);
         newCartItem.setCart(cart);
-        newCartItem.setQuantity(quantity);
+        newCartItem.setQuantity(1);
         return newCartItem;
-    }
-
-    private void validateQuantityAgainstExisting(CartItemModel cartItem, int quantity) {
-        if (quantity < cartItem.getQuantity()) {
-            throw new IllegalArgumentException("Quantity must be greater than or equal to " + cartItem.getQuantity());
-        }
     }
 
     private void updateCartItemQuantity(CartItemModel cartItem, int quantity) {
@@ -151,7 +142,7 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
         cartItemRepository.save(cartItem);
     }
 
-    private CartItemCreationResultDTO createCartItemCreationResultDTO(CartItemModel cartItem) {
-        return CartItemCreationResultDTO.fromCartItemModel(cartItem);
+    private CartItemResultDTO createCartItemCreationResultDTO(CartItemModel cartItem) {
+        return CartItemResultDTO.fromCartItemModel(cartItem);
     }
 }
