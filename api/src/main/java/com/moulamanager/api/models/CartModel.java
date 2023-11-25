@@ -1,9 +1,8 @@
 package com.moulamanager.api.models;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,16 +12,16 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Table(name = "cart")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class CartModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "user_id", unique = true)
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     private UserModel user;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -30,5 +29,5 @@ public class CartModel {
     private Date createdAt;
 
     @Column(name = "is_checked_out")
-    private boolean isCheckedOut;
+    private boolean checkedOut;
 }
