@@ -1,6 +1,5 @@
 package com.moulamanager.api.controllers;
 
-import com.moulamanager.api.dto.AddProductToCartRequestDTO;
 import com.moulamanager.api.dto.CartItemResultDTO;
 import com.moulamanager.api.models.CartItemModel;
 import com.moulamanager.api.services.cartItem.CartItemService;

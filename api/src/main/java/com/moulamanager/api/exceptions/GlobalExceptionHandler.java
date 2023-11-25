@@ -3,6 +3,7 @@ package com.moulamanager.api.exceptions;
 import com.moulamanager.api.exceptions.cart.CartAlreadyCheckedOutException;
 import com.moulamanager.api.exceptions.cart.CartAlreadyExistsException;
 import com.moulamanager.api.exceptions.cart.CartNotFoundException;
+import com.moulamanager.api.exceptions.cartItem.CartItemAlreadyExistsException;
 import com.moulamanager.api.exceptions.cartItem.CartItemNotFoundException;
 import com.moulamanager.api.exceptions.product.ProductAlreadyExistsException;
 import com.moulamanager.api.exceptions.product.ProductNotFoundException;
@@ -54,10 +55,14 @@ public class GlobalExceptionHandler {
         return buildResponseException(exception, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(value = CartItemAlreadyExistsException.class)
+    public ResponseEntity<Object> handleCartItemAlreadyExistsException(CartItemAlreadyExistsException exception) {
+        return buildResponseException(exception, HttpStatus.CONFLICT);
+    }
+
     @ExceptionHandler(value = RuntimeException.class)
     public ResponseEntity<Object> handleRuntimeException(RuntimeException exception) {
         return buildResponseException(exception, HttpStatus.INTERNAL_SERVER_ERROR);
-
     }
 
     private static ResponseEntity<Object> buildResponseException(RuntimeException exception, HttpStatus httpStatus) {

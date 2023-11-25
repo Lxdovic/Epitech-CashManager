@@ -3,6 +3,7 @@ package com.moulamanager.api.services.cartItem;
 import com.moulamanager.api.dto.CartCreationResultDTO;
 import com.moulamanager.api.dto.CartItemResultDTO;
 import com.moulamanager.api.exceptions.cart.CartNotFoundException;
+import com.moulamanager.api.exceptions.cartItem.CartItemAlreadyExistsException;
 import com.moulamanager.api.exceptions.cartItem.CartItemNotFoundException;
 import com.moulamanager.api.models.CartItemModel;
 import com.moulamanager.api.models.CartModel;
@@ -69,6 +70,11 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
         } catch (CartNotFoundException e) {
             cart = createAndSaveNewCart(user);
         }
+
+        if (cartItemRepository.existsByCartIdAndProductId(cart.getId(), productId)) {
+            throw new CartItemAlreadyExistsException("Product with id " + productId + " already exists in cart with id " + cart.getId());
+        }
+        
         CartItemModel cartItem = getOrCreateCartItemForProductInCart(product, cart);
         return createCartItemCreationResultDTO(cartItem);
     }
