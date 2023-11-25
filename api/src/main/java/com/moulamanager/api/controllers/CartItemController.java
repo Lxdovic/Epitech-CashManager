@@ -1,6 +1,7 @@
 package com.moulamanager.api.controllers;
 
 import com.moulamanager.api.dto.CartItemResultDTO;
+import com.moulamanager.api.dto.UpdateCartItemQuantityDTO;
 import com.moulamanager.api.models.CartItemModel;
 import com.moulamanager.api.services.cartItem.CartItemService;
 import org.springframework.http.ResponseEntity;
@@ -19,19 +20,73 @@ public class CartItemController {
         this.cartItemService = cartItemService;
     }
 
+    /**
+     * Gets all cart items.
+     * <p>Example:</p>
+     * <pre>
+     *     GET /carts/items
+     *     Headers: Authorization: Bearer userToken
+     * </pre>
+     * @return A {@link ResponseEntity} containing a list of {@link CartItemModel}s.
+     */
     @GetMapping
     public ResponseEntity<List<CartItemModel>> getAllCartItems() {
         return ResponseEntity.ok(cartItemService.findAll());
     }
 
+    /**
+     * Gets a cart item by ID.
+     * <p>Example:</p>
+     * <pre>
+     *     GET /carts/items/1
+     *     Headers: Authorization: Bearer userToken
+     * </pre>
+     * @param id The ID of the cart item to get.
+     * @return A {@link ResponseEntity} containing the {@link CartItemModel} of the cart item.
+     */
     @GetMapping("/{id}")
     public ResponseEntity<CartItemModel> getCartItemById(@PathVariable long id) {
         return ResponseEntity.ok(cartItemService.findById(id));
     }
 
+    /**
+     * Adds a product to the cart.
+     *
+     * <p>Example:</p>
+     * <pre>
+     * POST /carts/items/1
+     * Headers: Authorization: Bearer userToken;
+     * </pre>
+     *
+     * @param productId The ID of the product to add to the cart.
+     * @param userToken The token of the user who is adding the product.
+     * @return A {@link ResponseEntity} containing the {@link CartItemResultDTO} of the added product.
+     */
     @PostMapping("/{productId}")
-    public ResponseEntity<CartItemResultDTO> addProductToCart(@PathVariable long productId, @RequestHeader("Authorization") String token) {
-        return ResponseEntity.ok(cartItemService.addProductToCart(productId, token));
+    public ResponseEntity<CartItemResultDTO> addProductToCart(@PathVariable long productId, @RequestHeader("Authorization") String userToken) {
+        return ResponseEntity.ok(cartItemService.addProductToCart(productId, userToken));
+    }
+
+    /**
+     * Updates the quantity of a product in the cart.
+     *
+     * <p>Example:</p>
+     * <pre>
+     * PATCH /carts/items/1
+     * Headers: Authorization: Bearer userToken
+     * Body: {
+     *     "quantity": 2
+     * }
+     * </pre>
+     *
+     * @param productId The ID of the product to update.
+     * @param quantity The new quantity of the product.
+     * @param userToken The token of the user who is updating the product.
+     * @return A {@link ResponseEntity} containing the {@link CartItemModel} of the updated product.
+     */
+    @PatchMapping("/{productId}")
+    public ResponseEntity<CartItemModel> updateProductQuantity(@PathVariable long productId, @RequestBody UpdateCartItemQuantityDTO quantity, @RequestHeader("Authorization") String userToken) {
+        return ResponseEntity.ok(cartItemService.updateProductQuantity(productId, quantity, userToken));
     }
 
 }
