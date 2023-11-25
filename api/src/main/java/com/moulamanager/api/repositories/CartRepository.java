@@ -13,6 +13,8 @@ public interface CartRepository extends JpaRepository<CartModel, Long> {
     Optional<CartModel> findById(long id);
     Optional<CartModel> findByUserId(long userId);
 
+    Optional<CartModel> findByUserIdAndCheckedOut(long userId, boolean checkedOut);
+
     boolean existsByUserId(long userId);
     boolean existsById(long id);
 
