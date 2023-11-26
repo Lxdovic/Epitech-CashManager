@@ -24,6 +24,6 @@ public interface ICartItemService {
 
     CartItemResultDTO updateProductQuantity(long productId, UpdateCartItemQuantityDTO quantity, String token);
 
-    void delete(long id);
+    void removeProductFromCart(long productId, String token);
 
 }

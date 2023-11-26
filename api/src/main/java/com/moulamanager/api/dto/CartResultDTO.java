@@ -7,7 +7,6 @@ import lombok.Data;
 
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Data
 @Builder
@@ -27,7 +26,7 @@ public class CartResultDTO {
     }
 
     public static List<CartResultDTO> fromCartModelList(List<CartModel> carts) {
-        return carts.stream().map(CartResultDTO::fromCartModel).collect(Collectors.toList());
+        return carts.stream().map(CartResultDTO::fromCartModel).toList();
     }
 
     public static CartModel toCartModel(CartResultDTO cartResultDTO) {

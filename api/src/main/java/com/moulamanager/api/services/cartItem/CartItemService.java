@@ -45,22 +45,22 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
 
     @Override
     public CartItemResultDTO findById(long id) {
-        return createCartItemCreationResultDTO(cartItemRepository.findById(id).orElseThrow(() -> new CartItemNotFoundException(CART_ITEM_NOT_FOUND)));
+        return mapToCartItemResultDTO(cartItemRepository.findById(id).orElseThrow(() -> new CartItemNotFoundException(CART_ITEM_NOT_FOUND)));
     }
 
     @Override
     public CartItemResultDTO findByCartId(long cartId) {
-        return createCartItemCreationResultDTO(cartItemRepository.findByCartId(cartId).orElseThrow(() -> new CartItemNotFoundException(CART_ITEM_NOT_FOUND)));
+        return mapToCartItemResultDTO(cartItemRepository.findByCartId(cartId).orElseThrow(() -> new CartItemNotFoundException(CART_ITEM_NOT_FOUND)));
     }
 
     @Override
     public CartItemResultDTO findByProductId(long productId) {
-        return createCartItemCreationResultDTO(cartItemRepository.findByProductId(productId).orElseThrow(() -> new CartItemNotFoundException(CART_ITEM_NOT_FOUND)));
+        return mapToCartItemResultDTO(cartItemRepository.findByProductId(productId).orElseThrow(() -> new CartItemNotFoundException(CART_ITEM_NOT_FOUND)));
     }
 
     @Override
     public CartItemResultDTO findByCartIdAndProductId(long cartId, long productId) {
-        return CartItemResultDTO.fromCartItemModel(cartItemRepository.findByCartIdAndProductId(cartId, productId).orElseThrow(() -> new CartItemNotFoundException(CART_ITEM_NOT_FOUND)));
+        return mapToCartItemResultDTO(cartItemRepository.findByCartIdAndProductId(cartId, productId).orElseThrow(() -> new CartItemNotFoundException(CART_ITEM_NOT_FOUND)));
     }
 
     /**
@@ -89,13 +89,13 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
         }
 
         CartItemModel cartItem = getOrCreateCartItemForProductInCart(product, cart);
-        return createCartItemCreationResultDTO(cartItem);
+        return mapToCartItemResultDTO(cartItem);
     }
 
     @Override
     public CartItemResultDTO save(CartItemModel cartItem) {
         findProductById(cartItem.getProduct().getId());
-        return createCartItemCreationResultDTO(cartItemRepository.save(cartItem));
+        return mapToCartItemResultDTO(cartItemRepository.save(cartItem));
     }
 
     /**
@@ -122,11 +122,12 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
     }
 
     @Override
-    public void delete(long id) {
-        if (!cartItemRepository.existsById(id)) {
-            throw new CartItemNotFoundException(CART_ITEM_NOT_FOUND);
-        }
-        cartItemRepository.deleteById(id);
+    public void removeProductFromCart(long productId, String userToken) {
+        long userId = jwtUtils.getUserIdFromJwtToken(userToken);
+        UserModel user = findUserById(userId);
+        CartResultDTO cart = findCartByUserIdAndNotCheckedOut(user);
+        CartItemResultDTO cartItem = findByCartIdAndProductId(cart.getId(), productId);
+        cartItemRepository.delete(mapToCartItemModel(cartItem));
     }
 
     private void validateQuantity(int quantity) {
@@ -178,10 +179,14 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
 
     private void updateCartItemQuantity(CartItemResultDTO cartItem, int quantity) {
         cartItem.setQuantity(quantity);
-        cartItemRepository.save(CartItemResultDTO.toCartItemModel(cartItem));
+        cartItemRepository.save(mapToCartItemModel(cartItem));
     }
 
-    private CartItemResultDTO createCartItemCreationResultDTO(CartItemModel cartItem) {
+    private CartItemResultDTO mapToCartItemResultDTO(CartItemModel cartItem) {
         return CartItemResultDTO.fromCartItemModel(cartItem);
+    }
+
+    private CartItemModel mapToCartItemModel(CartItemResultDTO cartItem) {
+        return CartItemResultDTO.toCartItemModel(cartItem);
     }
 }

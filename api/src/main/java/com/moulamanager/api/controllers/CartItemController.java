@@ -89,4 +89,23 @@ public class CartItemController {
         return ResponseEntity.ok(cartItemService.updateProductQuantity(productId, quantity, userToken));
     }
 
+    /**
+     * Removes a product from the cart.
+     *
+     * <p>Example:</p>
+     * <pre>
+     * DELETE /carts/items/1
+     * Headers: Authorization: Bearer userToken
+     * </pre>
+     *
+     * @param productId The ID of the product to remove.
+     * @param userToken The token of the user who is removing the product.
+     * @return A {@link ResponseEntity} containing the {@link CartItemModel} of the removed product.
+     */
+    @DeleteMapping("/{productId}")
+    public ResponseEntity<CartItemResultDTO> removeProductFromCart(@PathVariable long productId, @RequestHeader("Authorization") String userToken) {
+        cartItemService.removeProductFromCart(productId, userToken);
+        return ResponseEntity.noContent().build();
+    }
+
 }
