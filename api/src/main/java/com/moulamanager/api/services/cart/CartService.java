@@ -51,7 +51,6 @@ public class CartService extends AbstractService<CartModel> implements ICartServ
     public CartResultDTO save(long userId) {
         UserModel user = findUserById(userId);
         validateCartExistence(userId);
-
         CartModel newCart = createNewCart(user);
         return CartResultDTO.fromCartModel(cartRepository.save(newCart));
     }
@@ -60,10 +59,6 @@ public class CartService extends AbstractService<CartModel> implements ICartServ
     public CartResultDTO update(CartModel cart) {
         CartModel cartModel = cartRepository.findById(cart.getId()).orElseThrow(() -> new CartNotFoundException(CART_NOT_FOUND));
         BeanUtils.copyProperties(cart, cartModel, getNullPropertyNames(cart));
-        if (cartRepository.existsByUserId(cart.getUser().getId())) {
-            throw new CartAlreadyExistsException("User with id " + cart.getUser().getId() + " already has an active cart");
-        }
-
         return CartResultDTO.fromCartModel(cartRepository.save(cartModel));
     }
 
@@ -88,18 +83,14 @@ public class CartService extends AbstractService<CartModel> implements ICartServ
     }
 
     private void validateCartExistence(long userId) {
-        cartRepository.findByUserIdAndCheckedOut(userId, false)
-                .filter(c -> !c.isCheckedOut())
-                .ifPresent(c -> {
-                    throw new CartAlreadyExistsException("User with id " + userId + " already has an active cart");
-                });
+        cartRepository.findByUserIdAndCheckedOut(userId, false).ifPresent(cart -> {
+            throw new CartAlreadyExistsException("User with id " + userId + " already has an active cart");
+        });
     }
 
     private CartModel createNewCart(UserModel user) {
         CartModel newCart = new CartModel();
         newCart.setUser(user);
-        newCart.setCheckedOut(false);
-        newCart.setCreatedAt(new Date());
         return newCart;
     }
 }

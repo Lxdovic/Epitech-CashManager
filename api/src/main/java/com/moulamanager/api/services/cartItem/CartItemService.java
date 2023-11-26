@@ -82,7 +82,7 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
         try {
             cart = findCartByUserIdAndNotCheckedOut(user);
         } catch (CartNotFoundException e) {
-            cart = createAndSaveNewCart(user);
+            cart = createNewCart(user);
         }
 
         if (cartItemRepository.existsByCartIdAndProductId(cart.getId(), productId)) {
@@ -90,6 +90,7 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
         }
 
         CartItemModel cartItem = getOrCreateCartItemForProductInCart(product, cart);
+        updateCartTotalPrice(cart, cart.getTotalPrice() + product.getPrice());
         return mapToCartItemResultDTO(cartItem);
     }
 
@@ -111,8 +112,14 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
         UserModel user = findUserById(userId);
         CartResultDTO cart = findCartByUserIdAndNotCheckedOut(user);
         CartItemResultDTO cartItem = findByCartIdAndProductId(cart.getId(), productId);
+
         checkIfSameQuantity(quantity.getQuantity(), cartItem);
+
+        double productPrice = cartItem.getProduct().getPrice();
+        double priceDifference = productPrice * (quantity.getQuantity() - cartItem.getQuantity());
         updateCartItemQuantity(cartItem, quantity.getQuantity());
+        updateCartTotalPrice(cart, cart.getTotalPrice() + priceDifference);
+
         return cartItem;
     }
 
@@ -122,6 +129,7 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
         UserModel user = findUserById(userId);
         CartResultDTO cart = findCartByUserIdAndNotCheckedOut(user);
         CartItemResultDTO cartItem = findByCartIdAndProductId(cart.getId(), productId);
+        updateCartTotalPrice(cart, cart.getTotalPrice() - (cartItem.getProduct().getPrice() * cartItem.getQuantity()));
         cartItemRepository.delete(mapToCartItemModel(cartItem));
     }
 
@@ -131,6 +139,7 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
         long userId = jwtUtils.getUserIdFromJwtToken(userToken);
         UserModel user = findUserById(userId);
         CartResultDTO cart = findCartByUserIdAndNotCheckedOut(user);
+        updateCartTotalPrice(cart, 0);
         cartItemRepository.deleteAllByCartId(cart.getId());
     }
 
@@ -163,9 +172,8 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
         return cartService.findByUserIdAndCheckedOut(user.getId(), false);
     }
 
-    private CartResultDTO createAndSaveNewCart(UserModel user) {
-        CartResultDTO cartCreationResultDTO = cartService.save(user.getId());
-        return cartService.findById(cartCreationResultDTO.getId());
+    private CartResultDTO createNewCart(UserModel user) {
+        return cartService.save(user.getId());
     }
 
     private CartItemModel getOrCreateCartItemForProductInCart(ProductModel product, CartResultDTO cart) {
@@ -178,12 +186,18 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
         newCartItem.setProduct(product);
         newCartItem.setCart(CartResultDTO.toCartModel(cart));
         newCartItem.setQuantity(1);
+        newCartItem.getCart().setTotalPrice(newCartItem.getCart().getTotalPrice() + product.getPrice());
         return cartItemRepository.save(newCartItem);
     }
 
     private void updateCartItemQuantity(CartItemResultDTO cartItem, int quantity) {
         cartItem.setQuantity(quantity);
         cartItemRepository.save(mapToCartItemModel(cartItem));
+    }
+
+    private void updateCartTotalPrice(CartResultDTO cart, double totalPrice) {
+        cart.setTotalPrice(totalPrice);
+        cartService.update(CartResultDTO.toCartModel(cart));
     }
 
     private CartItemResultDTO mapToCartItemResultDTO(CartItemModel cartItem) {

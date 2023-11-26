@@ -26,10 +26,10 @@ public class CartModel {
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at")
-    private Date createdAt;
+    private Date createdAt = new Date();
 
     @Column(name = "is_checked_out")
-    private boolean checkedOut;
+    private boolean checkedOut = false;
 
     @Column(name = "total_price")
     private double totalPrice = 0.0;
