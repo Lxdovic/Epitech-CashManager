@@ -33,4 +33,11 @@ public class CartModel {
 
     @Column(name = "total_price")
     private double totalPrice = 0.0;
+
+    public void setTotalPrice(double totalPrice) {
+        if (totalPrice < 0) {
+            throw new IllegalArgumentException("Total price cannot be negative");
+        }
+        this.totalPrice = totalPrice;
+    }
 }

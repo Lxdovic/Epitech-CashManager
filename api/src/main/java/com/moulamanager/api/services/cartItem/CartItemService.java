@@ -1,6 +1,6 @@
 package com.moulamanager.api.services.cartItem;
 
-import com.moulamanager.api.dto.CartResultDTO;
+import com.moulamanager.api.dto.cart.result.CartResultDTO;
 import com.moulamanager.api.dto.CartItemResultDTO;
 import com.moulamanager.api.dto.UpdateCartItemQuantityDTO;
 import com.moulamanager.api.exceptions.cart.CartNotFoundException;

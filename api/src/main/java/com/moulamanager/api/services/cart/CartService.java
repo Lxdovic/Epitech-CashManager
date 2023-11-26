@@ -1,6 +1,6 @@
 package com.moulamanager.api.services.cart;
 
-import com.moulamanager.api.dto.CartResultDTO;
+import com.moulamanager.api.dto.cart.result.CartResultDTO;
 import com.moulamanager.api.exceptions.cart.CartAlreadyExistsException;
 import com.moulamanager.api.exceptions.cart.CartNotFoundException;
 import com.moulamanager.api.exceptions.user.UserNotFoundException;
@@ -64,6 +64,13 @@ public class CartService extends AbstractService<CartModel> implements ICartServ
             throw new CartAlreadyExistsException("User with id " + cart.getUser().getId() + " already has an active cart");
         }
 
+        return CartResultDTO.fromCartModel(cartRepository.save(cartModel));
+    }
+
+    @Override
+    public CartResultDTO updateCartTotalPrice(long cartId, double totalPrice) {
+        CartModel cartModel = cartRepository.findById(cartId).orElseThrow(() -> new CartNotFoundException(CART_NOT_FOUND));
+        cartModel.setTotalPrice(totalPrice);
         return CartResultDTO.fromCartModel(cartRepository.save(cartModel));
     }
 
