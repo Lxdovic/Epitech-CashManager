@@ -30,4 +30,7 @@ public class CartModel {
 
     @Column(name = "is_checked_out")
     private boolean checkedOut;
+
+    @Column(name = "total_price")
+    private double totalPrice = 0.0;
 }
