@@ -39,23 +39,23 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
     }
 
     @Override
-    public List<CartItemModel> findAll() {
-        return cartItemRepository.findAll();
+    public List<CartItemResultDTO> findAll() {
+        return CartItemResultDTO.fromCartItemModelList(cartItemRepository.findAll());
     }
 
     @Override
-    public CartItemModel findById(long id) {
-        return cartItemRepository.findById(id).orElseThrow(() -> new CartItemNotFoundException(CART_ITEM_NOT_FOUND));
+    public CartItemResultDTO findById(long id) {
+        return createCartItemCreationResultDTO(cartItemRepository.findById(id).orElseThrow(() -> new CartItemNotFoundException(CART_ITEM_NOT_FOUND)));
     }
 
     @Override
-    public CartItemModel findByCartId(long cartId) {
-        return cartItemRepository.findByCartId(cartId).orElseThrow(() -> new CartItemNotFoundException(CART_ITEM_NOT_FOUND));
+    public CartItemResultDTO findByCartId(long cartId) {
+        return createCartItemCreationResultDTO(cartItemRepository.findByCartId(cartId).orElseThrow(() -> new CartItemNotFoundException(CART_ITEM_NOT_FOUND)));
     }
 
     @Override
-    public CartItemModel findByProductId(long productId) {
-        return cartItemRepository.findByProductId(productId).orElseThrow(() -> new CartItemNotFoundException(CART_ITEM_NOT_FOUND));
+    public CartItemResultDTO findByProductId(long productId) {
+        return createCartItemCreationResultDTO(cartItemRepository.findByProductId(productId).orElseThrow(() -> new CartItemNotFoundException(CART_ITEM_NOT_FOUND)));
     }
 
     @Override
@@ -93,9 +93,9 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
     }
 
     @Override
-    public CartItemModel save(CartItemModel cartItem) {
+    public CartItemResultDTO save(CartItemModel cartItem) {
         findProductById(cartItem.getProduct().getId());
-        return cartItemRepository.save(cartItem);
+        return createCartItemCreationResultDTO(cartItemRepository.save(cartItem));
     }
 
     /**

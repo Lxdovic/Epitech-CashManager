@@ -8,19 +8,19 @@ import java.util.List;
 
 public interface ICartItemService {
 
-    List<CartItemModel> findAll();
+    List<CartItemResultDTO> findAll();
 
-    CartItemModel findById(long id);
+    CartItemResultDTO findById(long id);
 
-    CartItemModel findByCartId(long cartId);
+    CartItemResultDTO findByCartId(long cartId);
 
-    CartItemModel findByProductId(long productId);
+    CartItemResultDTO findByProductId(long productId);
 
     CartItemResultDTO findByCartIdAndProductId(long cartId, long productId);
 
     CartItemResultDTO addProductToCart(long productId, String token);
 
-    CartItemModel save(CartItemModel cartItem);
+    CartItemResultDTO save(CartItemModel cartItem);
 
     CartItemResultDTO updateProductQuantity(long productId, UpdateCartItemQuantityDTO quantity, String token);
 

@@ -5,6 +5,8 @@ import com.moulamanager.api.models.ProductModel;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @Builder
 public class CartItemResultDTO {
@@ -20,6 +22,10 @@ public class CartItemResultDTO {
                 .product(cartItem.getProduct())
                 .quantity(cartItem.getQuantity())
                 .build();
+    }
+
+    public static List<CartItemResultDTO> fromCartItemModelList(List<CartItemModel> cartItems) {
+        return cartItems.stream().map(CartItemResultDTO::fromCartItemModel).toList();
     }
 
     public static CartItemModel toCartItemModel(CartItemResultDTO cartItem) {

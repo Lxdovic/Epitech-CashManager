@@ -30,7 +30,7 @@ public class CartItemController {
      * @return A {@link ResponseEntity} containing a list of {@link CartItemModel}s.
      */
     @GetMapping
-    public ResponseEntity<List<CartItemModel>> getAllCartItems() {
+    public ResponseEntity<List<CartItemResultDTO>> getAllCartItems() {
         return ResponseEntity.ok(cartItemService.findAll());
     }
 
@@ -45,7 +45,7 @@ public class CartItemController {
      * @return A {@link ResponseEntity} containing the {@link CartItemModel} of the cart item.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<CartItemModel> getCartItemById(@PathVariable long id) {
+    public ResponseEntity<CartItemResultDTO> getCartItemById(@PathVariable long id) {
         return ResponseEntity.ok(cartItemService.findById(id));
     }
 
