@@ -16,6 +16,7 @@ import com.moulamanager.api.services.jwt.JwtUtils;
 import com.moulamanager.api.services.product.ProductService;
 import com.moulamanager.api.services.user.UserService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -92,12 +93,6 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
         return mapToCartItemResultDTO(cartItem);
     }
 
-    @Override
-    public CartItemResultDTO save(CartItemModel cartItem) {
-        findProductById(cartItem.getProduct().getId());
-        return mapToCartItemResultDTO(cartItemRepository.save(cartItem));
-    }
-
     /**
      * Update the quantity of the cart item with the given product id
      * If the cart item doesn't exist, throw an exception
@@ -128,6 +123,15 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
         CartResultDTO cart = findCartByUserIdAndNotCheckedOut(user);
         CartItemResultDTO cartItem = findByCartIdAndProductId(cart.getId(), productId);
         cartItemRepository.delete(mapToCartItemModel(cartItem));
+    }
+
+    @Transactional
+    @Override
+    public void deleteAllProductsFromCart(String userToken) {
+        long userId = jwtUtils.getUserIdFromJwtToken(userToken);
+        UserModel user = findUserById(userId);
+        CartResultDTO cart = findCartByUserIdAndNotCheckedOut(user);
+        cartItemRepository.deleteAllByCartId(cart.getId());
     }
 
     private void validateQuantity(int quantity) {

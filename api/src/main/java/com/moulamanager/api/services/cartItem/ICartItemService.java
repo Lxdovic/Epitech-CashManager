@@ -20,10 +20,10 @@ public interface ICartItemService {
 
     CartItemResultDTO addProductToCart(long productId, String token);
 
-    CartItemResultDTO save(CartItemModel cartItem);
-
     CartItemResultDTO updateProductQuantity(long productId, UpdateCartItemQuantityDTO quantity, String token);
 
     void removeProductFromCart(long productId, String token);
+
+    void deleteAllProductsFromCart(String token);
 
 }

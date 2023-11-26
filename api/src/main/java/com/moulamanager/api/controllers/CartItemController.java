@@ -108,4 +108,22 @@ public class CartItemController {
         return ResponseEntity.noContent().build();
     }
 
+    /**
+     * Deletes all products from the cart.
+     *
+     * <p>Example:</p>
+     * <pre>
+     * DELETE /carts/items
+     * Headers: Authorization: Bearer userToken
+     * </pre>
+     *
+     * @param userToken The token of the user who is removing the product.
+     * @return A {@link ResponseEntity} containing the {@link CartItemModel} of the removed product.
+     */
+    @DeleteMapping
+    public ResponseEntity<CartItemResultDTO> deleteAllProductsFromCart(@RequestHeader("Authorization") String userToken) {
+        cartItemService.deleteAllProductsFromCart(userToken);
+        return ResponseEntity.noContent().build();
+    }
+
 }
