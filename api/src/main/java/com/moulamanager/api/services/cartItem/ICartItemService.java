@@ -2,12 +2,13 @@ package com.moulamanager.api.services.cartItem;
 
 import com.moulamanager.api.dto.cartItem.result.CartItemResultDTO;
 import com.moulamanager.api.dto.cartItem.request.UpdateCartItemQuantityDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 
 public interface ICartItemService {
 
-    List<CartItemResultDTO> findAll();
+    Page<CartItemResultDTO> findAll(Pageable pageable);
 
     CartItemResultDTO findById(long id);
 

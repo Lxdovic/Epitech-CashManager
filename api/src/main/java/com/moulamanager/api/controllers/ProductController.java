@@ -2,10 +2,11 @@ package com.moulamanager.api.controllers;
 
 import com.moulamanager.api.models.ProductModel;
 import com.moulamanager.api.services.product.ProductService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/products")
@@ -18,8 +19,10 @@ public class ProductController extends AbstractController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ProductModel>> getAllProducts() {
-        return ResponseEntity.ok(productService.findAll());
+    public ResponseEntity<Page<ProductModel>> getAllProducts(@RequestParam(defaultValue = "0") int page,
+                                                             @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(productService.findAll(pageable));
     }
 
     @GetMapping("/{id}")

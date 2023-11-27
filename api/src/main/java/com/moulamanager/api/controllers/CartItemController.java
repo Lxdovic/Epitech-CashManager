@@ -4,10 +4,11 @@ import com.moulamanager.api.dto.cartItem.result.CartItemResultDTO;
 import com.moulamanager.api.dto.cartItem.request.UpdateCartItemQuantityDTO;
 import com.moulamanager.api.models.CartItemModel;
 import com.moulamanager.api.services.cartItem.CartItemService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/carts/items")
@@ -30,8 +31,10 @@ public class CartItemController {
      * @return A {@link ResponseEntity} containing a list of {@link CartItemModel}s.
      */
     @GetMapping
-    public ResponseEntity<List<CartItemResultDTO>> getAllCartItems() {
-        return ResponseEntity.ok(cartItemService.findAll());
+    public ResponseEntity<Page<CartItemResultDTO>> getAllCartItems(@RequestParam(defaultValue = "0") int page,
+                                                                   @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(cartItemService.findAll(pageable));
     }
 
     /**

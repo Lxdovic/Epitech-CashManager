@@ -6,9 +6,9 @@ import com.moulamanager.api.models.ProductModel;
 import com.moulamanager.api.repositories.ProductRepository;
 import com.moulamanager.api.services.AbstractService;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class ProductService extends AbstractService<ProductModel> implements IProductService {
@@ -22,8 +22,8 @@ public class ProductService extends AbstractService<ProductModel> implements IPr
     }
 
     @Override
-    public List<ProductModel> findAll() {
-        return productRepository.findAll();
+    public Page<ProductModel> findAll(Pageable pageable) {
+        return productRepository.findAll(pageable);
     }
 
     @Override

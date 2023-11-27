@@ -4,9 +4,9 @@ import com.moulamanager.api.models.CartModel;
 import com.moulamanager.api.models.UserModel;
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.data.domain.Page;
 
 import java.util.Date;
-import java.util.List;
 
 @Data
 @Builder
@@ -27,8 +27,8 @@ public class CartResultDTO {
                 .build();
     }
 
-    public static List<CartResultDTO> fromCartModelList(List<CartModel> carts) {
-        return carts.stream().map(CartResultDTO::fromCartModel).toList();
+    public static Page<CartResultDTO> fromCartModelList(Page<CartModel> carts) {
+        return carts.map(CartResultDTO::fromCartModel);
     }
 
     public static CartModel toCartModel(CartResultDTO cartResultDTO) {

@@ -4,10 +4,11 @@ import com.moulamanager.api.dto.cart.request.UpdateCartTotalPriceRequestDTO;
 import com.moulamanager.api.dto.cart.result.CartResultDTO;
 import com.moulamanager.api.models.CartModel;
 import com.moulamanager.api.services.cart.CartService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/carts")
@@ -20,8 +21,10 @@ public class CartController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CartResultDTO>> getAllCarts() {
-        return ResponseEntity.ok(cartService.findAll());
+    public ResponseEntity<Page<CartResultDTO>> getAllCarts(@RequestParam(defaultValue = "0") int page,
+                                                           @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(cartService.findAll(pageable));
     }
 
     @GetMapping("/{id}")

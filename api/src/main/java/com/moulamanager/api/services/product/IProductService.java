@@ -1,11 +1,11 @@
 package com.moulamanager.api.services.product;
 
 import com.moulamanager.api.models.ProductModel;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface IProductService {
-    List<ProductModel> findAll();
+    Page<ProductModel> findAll(Pageable pageable);
     ProductModel findById(long id);
 
     ProductModel findByBarcode(String barcode);

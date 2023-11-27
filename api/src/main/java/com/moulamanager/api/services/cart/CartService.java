@@ -10,10 +10,9 @@ import com.moulamanager.api.repositories.CartRepository;
 import com.moulamanager.api.repositories.UserRepository;
 import com.moulamanager.api.services.AbstractService;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.Date;
-import java.util.List;
 
 @Service
 public class CartService extends AbstractService<CartModel> implements ICartService {
@@ -28,8 +27,8 @@ public class CartService extends AbstractService<CartModel> implements ICartServ
     }
 
     @Override
-    public List<CartResultDTO> findAll() {
-        return CartResultDTO.fromCartModelList(cartRepository.findAll());
+    public Page<CartResultDTO> findAll(Pageable pageable) {
+        return CartResultDTO.fromCartModelList(cartRepository.findAll(pageable));
     }
 
     @Override

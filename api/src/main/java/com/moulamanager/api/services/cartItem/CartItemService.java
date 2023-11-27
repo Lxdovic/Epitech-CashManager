@@ -15,10 +15,10 @@ import com.moulamanager.api.services.cart.CartService;
 import com.moulamanager.api.services.jwt.JwtUtils;
 import com.moulamanager.api.services.product.ProductService;
 import com.moulamanager.api.services.user.UserService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 public class CartItemService extends AbstractService<CartItemModel> implements ICartItemService {
@@ -40,8 +40,8 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
     }
 
     @Override
-    public List<CartItemResultDTO> findAll() {
-        return CartItemResultDTO.fromCartItemModelList(cartItemRepository.findAll());
+    public Page<CartItemResultDTO> findAll(Pageable pageable) {
+        return CartItemResultDTO.fromCartItemModelList(cartItemRepository.findAll(pageable));
     }
 
     @Override
