@@ -1,6 +1,8 @@
 package com.moulamanager.api.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -32,12 +34,7 @@ public class CartModel {
     private boolean checkedOut = false;
 
     @Column(name = "total_price")
+    @Min(value = 0, message = "Total price can't be negative")
     private double totalPrice = 0.0;
 
-    public void setTotalPrice(double totalPrice) {
-        if (totalPrice < 0) {
-            throw new IllegalArgumentException("Total price cannot be negative");
-        }
-        this.totalPrice = totalPrice;
-    }
 }

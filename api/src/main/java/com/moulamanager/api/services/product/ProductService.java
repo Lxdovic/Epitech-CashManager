@@ -38,8 +38,8 @@ public class ProductService extends AbstractService<ProductModel> implements IPr
 
     @Override
     public ProductModel save(ProductModel product) {
-        if (productRepository.existsByName(product.getName())) {
-            String PRODUCT_ALREADY_EXISTS = "Product already exists";
+        if (productRepository.existsByBarcode(product.getBarcode())) {
+            String PRODUCT_ALREADY_EXISTS = "Product with barcode " + product.getBarcode() + " already exists";
             throw new ProductAlreadyExistsException(PRODUCT_ALREADY_EXISTS);
         }
         return productRepository.save(product);

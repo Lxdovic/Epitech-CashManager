@@ -8,6 +8,7 @@ import com.moulamanager.api.exceptions.cartItem.CartItemNotFoundException;
 import com.moulamanager.api.exceptions.product.ProductAlreadyExistsException;
 import com.moulamanager.api.exceptions.product.ProductNotFoundException;
 import com.moulamanager.api.exceptions.user.UserNotFoundException;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -22,60 +23,66 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = ProductNotFoundException.class)
     public ResponseEntity<Object> handleProductNotFoundException(ProductNotFoundException exception) {
-        return buildResponseException(exception, HttpStatus.NOT_FOUND);
+        return buildResponseException(exception.getMessage(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(value = ProductAlreadyExistsException.class)
     public ResponseEntity<Object> handleProductAlreadyExistsException(ProductAlreadyExistsException exception) {
-        return buildResponseException(exception, HttpStatus.CONFLICT);
+        return buildResponseException(exception.getMessage(), HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(value = CartNotFoundException.class)
     public ResponseEntity<Object> handleCartNotFoundException(CartNotFoundException exception) {
-        return buildResponseException(exception, HttpStatus.NOT_FOUND);
+        return buildResponseException(exception.getMessage(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(value = CartAlreadyExistsException.class)
     public ResponseEntity<Object> handleCartAlreadyExistsException(CartAlreadyExistsException exception) {
-        return buildResponseException(exception, HttpStatus.CONFLICT);
+        return buildResponseException(exception.getMessage(), HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(value = CartAlreadyCheckedOutException.class)
     public ResponseEntity<Object> handleCartAlreadyExistsException(CartAlreadyCheckedOutException exception) {
-        return buildResponseException(exception, HttpStatus.CONFLICT);
+        return buildResponseException(exception.getMessage(), HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(value = UserNotFoundException.class)
     public ResponseEntity<Object> handleUserNotFoundException(UserNotFoundException exception) {
-        return buildResponseException(exception, HttpStatus.NOT_FOUND);
+        return buildResponseException(exception.getMessage(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(value = CartItemNotFoundException.class)
     public ResponseEntity<Object> handleCartItemNotFoundException(CartItemNotFoundException exception) {
-        return buildResponseException(exception, HttpStatus.NOT_FOUND);
+        return buildResponseException(exception.getMessage(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(value = CartItemAlreadyExistsException.class)
     public ResponseEntity<Object> handleCartItemAlreadyExistsException(CartItemAlreadyExistsException exception) {
-        return buildResponseException(exception, HttpStatus.CONFLICT);
+        return buildResponseException(exception.getMessage(), HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(value = RuntimeException.class)
     public ResponseEntity<Object> handleRuntimeException(RuntimeException exception) {
-        return buildResponseException(exception, HttpStatus.INTERNAL_SERVER_ERROR);
+        return buildResponseException(exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    private static ResponseEntity<Object> buildResponseException(RuntimeException exception, HttpStatus httpStatus) {
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<Object> handleConstraintViolationException(ConstraintViolationException exception) {
+        String errorMessage = exception.getConstraintViolations().iterator().next().getMessage();
+        return buildResponseException(errorMessage, HttpStatus.BAD_REQUEST);
+    }
+
+    private static ResponseEntity<Object> buildResponseException(String exception, HttpStatus httpStatus) {
         Map<String, Object> body = buildBodyExceptionResponse(exception);
         return ResponseEntity
                 .status(httpStatus)
                 .body(body);
     }
 
-    private static Map<String, Object> buildBodyExceptionResponse(Exception exception) {
+    private static Map<String, Object> buildBodyExceptionResponse(String exception) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", new Date());
-        body.put("message", exception.getMessage());
+        body.put("message", exception);
         return body;
     }
 
