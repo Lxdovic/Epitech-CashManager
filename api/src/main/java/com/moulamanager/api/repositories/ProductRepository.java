@@ -11,6 +11,8 @@ import java.util.Optional;
 public interface ProductRepository extends JpaRepository<ProductModel, Long> {
 
     Optional<ProductModel> findById(long id);
+
+    Optional<ProductModel> findByBarcode(String barcode);
     boolean existsById(long id);
     Optional<ProductModel> findByName(String name);
     boolean existsByName(String name);

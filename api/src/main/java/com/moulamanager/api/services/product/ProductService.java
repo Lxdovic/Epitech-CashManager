@@ -28,7 +28,12 @@ public class ProductService extends AbstractService<ProductModel> implements IPr
 
     @Override
     public ProductModel findById(long id) {
-        return productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND));
+        return findProductById(id);
+    }
+
+    @Override
+    public ProductModel findByBarcode(String barcode) {
+        return findProductByBarcode(barcode);
     }
 
     @Override
@@ -42,7 +47,7 @@ public class ProductService extends AbstractService<ProductModel> implements IPr
 
     @Override
     public ProductModel update(ProductModel product) {
-        ProductModel productModel = productRepository.findById(product.getId()).orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND));
+        ProductModel productModel = findProductById(product.getId());
         BeanUtils.copyProperties(product, productModel, getNullPropertyNames(product));
         return productRepository.save(productModel);
     }
@@ -53,5 +58,13 @@ public class ProductService extends AbstractService<ProductModel> implements IPr
             throw new ProductNotFoundException(PRODUCT_NOT_FOUND);
         }
         productRepository.deleteById(id);
+    }
+
+    private ProductModel findProductById(long id) {
+        return productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND));
+    }
+
+    private ProductModel findProductByBarcode(String barcode) {
+        return productRepository.findByBarcode(barcode).orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND));
     }
 }

@@ -27,6 +27,11 @@ public class ProductController extends AbstractController {
         return ResponseEntity.ok(productService.findById(id));
     }
 
+    @GetMapping("/barcode/{barcode}")
+    public ResponseEntity<ProductModel> getProductByBarcode(@PathVariable String barcode) {
+        return ResponseEntity.ok(productService.findByBarcode(barcode));
+    }
+
     @PostMapping
     public ResponseEntity<ProductModel> createProduct(@RequestBody ProductModel product) {
         return ResponseEntity.ok(productService.save(product));
