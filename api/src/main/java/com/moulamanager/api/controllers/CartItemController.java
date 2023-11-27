@@ -67,6 +67,12 @@ public class CartItemController {
         return ResponseEntity.ok(cartItemService.addProductToCart(productId, userToken));
     }
 
+    @PostMapping("/barcode/{barcode}")
+    public ResponseEntity<CartItemResultDTO> addProductToCartWithBarcode(@PathVariable String barcode, @RequestHeader("Authorization") String userToken) {
+        return ResponseEntity.ok(cartItemService.addProductToCartWithBarcode(barcode, userToken));
+    }
+
+
     /**
      * Updates the quantity of a product in the cart.
      *

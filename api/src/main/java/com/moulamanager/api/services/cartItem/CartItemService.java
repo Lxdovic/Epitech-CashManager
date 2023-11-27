@@ -65,33 +65,28 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
     }
 
     /**
-     * Add a product to the cart of the user with the given token
-     * If the user doesn't have a cart, create a new one
-     * If the product already exists in the cart, throw an exception
+     * Add a product with the given id to the cart of the user with the given token
      *
-     * @param productId The id of the product to add to the cart
+     * @param productId The id of the product to add
      * @param userToken The token of the user
      * @return The created cart item
      */
     @Override
     public CartItemResultDTO addProductToCart(long productId, String userToken) {
-        long userId = jwtUtils.getUserIdFromJwtToken(userToken);
-        UserModel user = findUserById(userId);
         ProductModel product = findProductById(productId);
-        CartResultDTO cart;
-        try {
-            cart = findCartByUserIdAndNotCheckedOut(user);
-        } catch (CartNotFoundException e) {
-            cart = createNewCart(user);
-        }
+        return addProductToCartByUserTokenAndProduct(product, userToken);
+    }
 
-        if (cartItemRepository.existsByCartIdAndProductId(cart.getId(), productId)) {
-            throw new CartItemAlreadyExistsException("Product with id " + productId + " already exists in cart with id " + cart.getId());
-        }
-
-        CartItemModel cartItem = getOrCreateCartItemForProductInCart(product, cart);
-        updateCartTotalPrice(cart, cart.getTotalPrice() + product.getPrice());
-        return mapToCartItemResultDTO(cartItem);
+    /**
+     * Add a product with the given barcode to the cart of the user with the given token
+     *
+     * @param barcode The barcode of the product to add
+     * @param userToken The token of the user
+     * @return The created cart item
+     */
+    public CartItemResultDTO addProductToCartWithBarcode(String barcode, String userToken) {
+        ProductModel product = productService.findByBarcode(barcode);
+        return addProductToCartByUserTokenAndProduct(product, userToken);
     }
 
     /**
@@ -141,6 +136,34 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
         CartResultDTO cart = findCartByUserIdAndNotCheckedOut(user);
         updateCartTotalPrice(cart, 0);
         cartItemRepository.deleteAllByCartId(cart.getId());
+    }
+
+    /**
+     * Add a product to the cart of the user with the given token
+     * If the user doesn't have a cart, create a new one
+     * If the product already exists in the cart, throw an exception
+     *
+     * @param product The product to add to the cart
+     * @param userToken The token of the user
+     * @return The created cart item
+     */
+    private CartItemResultDTO addProductToCartByUserTokenAndProduct(ProductModel product, String userToken) {
+        long userId = jwtUtils.getUserIdFromJwtToken(userToken);
+        UserModel user = findUserById(userId);
+        CartResultDTO cart;
+        try {
+            cart = findCartByUserIdAndNotCheckedOut(user);
+        } catch (CartNotFoundException e) {
+            cart = createNewCart(user);
+        }
+
+        if (cartItemRepository.existsByCartIdAndProductId(cart.getId(), product.getId())) {
+            throw new CartItemAlreadyExistsException("Product with id " + product.getId() + " already exists in cart with id " + cart.getId());
+        }
+
+        CartItemModel cartItem = getOrCreateCartItemForProductInCart(product, cart);
+        updateCartTotalPrice(cart, cart.getTotalPrice() + product.getPrice());
+        return mapToCartItemResultDTO(cartItem);
     }
 
     private void validateQuantity(int quantity) {

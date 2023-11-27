@@ -19,6 +19,8 @@ public interface ICartItemService {
 
     CartItemResultDTO addProductToCart(long productId, String token);
 
+    CartItemResultDTO addProductToCartWithBarcode(String barcode, String token);
+
     CartItemResultDTO updateProductQuantity(long productId, UpdateCartItemQuantityDTO quantity, String token);
 
     void removeProductFromCart(long productId, String token);
