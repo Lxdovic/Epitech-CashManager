@@ -19,7 +19,9 @@ public class ProductModel {
 
     private String name;
 
-    private Double price;
+    private double price;
 
     private String description;
+
+    private int barcode;
 }
