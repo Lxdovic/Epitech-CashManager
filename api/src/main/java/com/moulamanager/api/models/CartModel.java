@@ -1,14 +1,16 @@
 package com.moulamanager.api.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data
@@ -36,5 +38,9 @@ public class CartModel {
     @Column(name = "total_price")
     @Min(value = 0, message = "Total price can't be negative")
     private double totalPrice = 0.0;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CartItemModel> cartItems;
 
 }

@@ -1,10 +1,10 @@
 package com.moulamanager.api.models;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Data
 @Entity
@@ -19,6 +19,9 @@ public class UserModel {
     private String username;
     private String email;
     private String password;
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CartModel> carts;
 
     public UserModel(String username, String email, String password) {
         this.username = username;

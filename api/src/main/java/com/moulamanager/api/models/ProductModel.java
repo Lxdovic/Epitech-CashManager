@@ -1,11 +1,15 @@
 package com.moulamanager.api.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -29,4 +33,8 @@ public class ProductModel {
     @Column(unique = true, length = 13)
     @Size(min = 13, max = 13, message = "Barcode must be 13 characters long")
     private String barcode;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CartItemModel> cartItems;
 }
