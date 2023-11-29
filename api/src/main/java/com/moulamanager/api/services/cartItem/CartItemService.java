@@ -44,7 +44,14 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
         return CartItemResultDTO.fromCartItemModelList(cartItemRepository.findAll(pageable));
     }
 
-
+    /**
+     * Gets all cart items by user ID.
+     *
+     * @param pageable The {@link Pageable} to use.
+     * @param userToken The token of the user to get the cart items for.
+     * @return A {@link Page} of {@link CartItemModel}s.
+     * @throws CartNotFoundException if the cart is not found.
+     */
     public Page<CartItemResultDTO> findAllByUser(Pageable pageable, String userToken) {
         long userId = jwtUtils.getUserIdFromJwtToken(userToken);
         UserModel user = findUserById(userId);
@@ -52,21 +59,50 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
         return CartItemResultDTO.fromCartItemModelList(cartItemRepository.findAllByCartId(cart.getId(), pageable));
     }
 
+    /**
+     * Find a cart item by ID
+     *
+     * @param id The ID of the cart item to find
+     * @return The cart item
+     * @throws CartItemNotFoundException If the cart item doesn't exist
+     */
     @Override
     public CartItemResultDTO findById(long id) {
         return mapToCartItemResultDTO(cartItemRepository.findById(id).orElseThrow(() -> new CartItemNotFoundException(CART_ITEM_NOT_FOUND)));
     }
 
+    /**
+     * Find a cart item by cart ID
+     *
+     * @param cartId The ID of the cart to find
+     * @return The cart item
+     * @throws CartItemNotFoundException If the cart item doesn't exist
+     */
     @Override
     public CartItemResultDTO findByCartId(long cartId) {
         return mapToCartItemResultDTO(cartItemRepository.findByCartId(cartId).orElseThrow(() -> new CartItemNotFoundException(CART_ITEM_NOT_FOUND)));
     }
 
+    /**
+     * Find a cart item by product ID
+     *
+     * @param productId The ID of the product to find
+     * @return The cart item
+     * @throws CartItemNotFoundException If the cart item doesn't exist
+     */
     @Override
     public CartItemResultDTO findByProductId(long productId) {
         return mapToCartItemResultDTO(cartItemRepository.findByProductId(productId).orElseThrow(() -> new CartItemNotFoundException(CART_ITEM_NOT_FOUND)));
     }
 
+    /**
+     * Find a cart item by cart ID and product ID
+     *
+     * @param cartId    The ID of the cart to find
+     * @param productId The ID of the product to find
+     * @return The cart item
+     * @throws CartItemNotFoundException If the cart item doesn't exist
+     */
     @Override
     public CartItemResultDTO findByCartIdAndProductId(long cartId, long productId) {
         return mapToCartItemResultDTO(cartItemRepository.findByCartIdAndProductId(cartId, productId).orElseThrow(() -> new CartItemNotFoundException(CART_ITEM_NOT_FOUND)));
@@ -88,7 +124,7 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
     /**
      * Add a product with the given barcode to the cart of the user with the given token
      *
-     * @param barcode The barcode of the product to add
+     * @param barcode   The barcode of the product to add
      * @param userToken The token of the user
      * @return The created cart item
      */
@@ -99,13 +135,14 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
 
     /**
      * Update the quantity of the cart item with the given product id
-     * If the cart item doesn't exist, throw an exception
-     * If the quantity is less than or equal to 0, throw an exception
      *
      * @param productId The id of the product to update
      * @param quantity  The new quantity
      * @param userToken The token of the user
      * @return The updated cart item
+     * @throws CartItemNotFoundException If the cart item doesn't exist
+     * @throws IllegalArgumentException If the quantity is less than or equal to 0
+     * @throws IllegalArgumentException If the quantity is the same as the previous quantity
      */
     @Override
     public CartItemResultDTO updateProductQuantity(long productId, UpdateCartItemQuantityDTO quantity, String userToken) {
@@ -126,6 +163,13 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
         return cartItem;
     }
 
+    /**
+     * Remove the product with the given id from the cart of the user with the given token
+     *
+     * @param productId The id of the product to remove
+     * @param userToken The token of the user
+     * @throws CartItemNotFoundException If the cart item doesn't exist
+     */
     @Override
     public void removeProductFromCart(long productId, String userToken) {
         long userId = jwtUtils.getUserIdFromJwtToken(userToken);
@@ -136,6 +180,12 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
         cartItemRepository.delete(mapToCartItemModel(cartItem));
     }
 
+    /**
+     * Remove all products from the cart of the user with the given token
+     *
+     * @param userToken The token of the user
+     * @throws CartItemNotFoundException If the cart item doesn't exist
+     */
     @Transactional
     @Override
     public void deleteAllProductsFromCart(String userToken) {
@@ -154,6 +204,7 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
      * @param product The product to add to the cart
      * @param userToken The token of the user
      * @return The created cart item
+     * @throws CartItemAlreadyExistsException If the product already exists in the cart
      */
     private CartItemResultDTO addProductToCartByUserTokenAndProduct(ProductModel product, String userToken) {
         long userId = jwtUtils.getUserIdFromJwtToken(userToken);
