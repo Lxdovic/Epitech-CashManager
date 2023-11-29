@@ -28,13 +28,19 @@ public class CartItemController {
      *     GET /carts/items
      *     Headers: Authorization: Bearer userToken
      * </pre>
-     * @return A {@link ResponseEntity} containing a list of {@link CartItemModel}s.
+     *
+     * @return A {@link ResponseEntity} containing a page of {@link CartItemModel}s.
      */
     @GetMapping
-    public ResponseEntity<Page<CartItemResultDTO>> getAllCartItems(@RequestParam(defaultValue = "0") int page,
-                                                                   @RequestParam(defaultValue = "10") int size) {
+    public ResponseEntity<Page<CartItemResultDTO>> getAllCartItems(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
         return ResponseEntity.ok(cartItemService.findAll(pageable));
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<Page<CartItemResultDTO>> getAllCartItemsByUser(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, @RequestHeader("Authorization") String userToken) {
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(cartItemService.findAllByUser(pageable, userToken));
     }
 
     /**
@@ -44,6 +50,7 @@ public class CartItemController {
      *     GET /carts/items/1
      *     Headers: Authorization: Bearer userToken
      * </pre>
+     *
      * @param id The ID of the cart item to get.
      * @return A {@link ResponseEntity} containing the {@link CartItemModel} of the cart item.
      */
@@ -89,7 +96,7 @@ public class CartItemController {
      * </pre>
      *
      * @param productId The ID of the product to update.
-     * @param quantity The new quantity of the product.
+     * @param quantity  The new quantity of the product.
      * @param userToken The token of the user who is updating the product.
      * @return A {@link ResponseEntity} containing the {@link CartItemModel} of the updated product.
      */

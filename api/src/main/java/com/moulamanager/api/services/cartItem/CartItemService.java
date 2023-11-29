@@ -44,6 +44,14 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
         return CartItemResultDTO.fromCartItemModelList(cartItemRepository.findAll(pageable));
     }
 
+
+    public Page<CartItemResultDTO> findAllByUser(Pageable pageable, String userToken) {
+        long userId = jwtUtils.getUserIdFromJwtToken(userToken);
+        UserModel user = findUserById(userId);
+        CartResultDTO cart = findCartByUserIdAndNotCheckedOut(user);
+        return CartItemResultDTO.fromCartItemModelList(cartItemRepository.findAllByCartId(cart.getId(), pageable));
+    }
+
     @Override
     public CartItemResultDTO findById(long id) {
         return mapToCartItemResultDTO(cartItemRepository.findById(id).orElseThrow(() -> new CartItemNotFoundException(CART_ITEM_NOT_FOUND)));

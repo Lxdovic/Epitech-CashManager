@@ -41,6 +41,13 @@ public class CartService extends AbstractService<CartModel> implements ICartServ
         return CartResultDTO.fromCartModel(cartRepository.findByUserId(userId).orElseThrow(() -> new CartNotFoundException(CART_NOT_FOUND)));
     }
 
+    /**
+     * Gets a cart by user ID and checked out status.
+     * @param userId The ID of the user to get the cart for.
+     * @param checkedOut The checked out status of the cart to get.
+     * @return A {@link CartModel} of the cart.
+     * @throws CartNotFoundException if the cart is not found.
+     */
     @Override
     public CartResultDTO findByUserIdAndCheckedOut(long userId, boolean checkedOut) {
         return CartResultDTO.fromCartModel(cartRepository.findByUserIdAndCheckedOut(userId, checkedOut).orElseThrow(() -> new CartNotFoundException(CART_NOT_FOUND)));

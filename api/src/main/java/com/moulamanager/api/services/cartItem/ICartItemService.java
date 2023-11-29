@@ -10,6 +10,8 @@ public interface ICartItemService {
 
     Page<CartItemResultDTO> findAll(Pageable pageable);
 
+    Page<CartItemResultDTO> findAllByUser(Pageable pageable, String token);
+
     CartItemResultDTO findById(long id);
 
     CartItemResultDTO findByCartId(long cartId);
