@@ -1,6 +1,7 @@
 package com.moulamanager.api.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,5 +27,6 @@ public class CartItemModel {
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     private ProductModel product;
 
-    private int quantity;
+    @Min(value = 1, message = "Quantity should not be less than 1")
+    private int quantity = 1;
 }

@@ -6,13 +6,12 @@ import com.moulamanager.api.dto.cartItem.request.UpdateCartItemQuantityDTO;
 import com.moulamanager.api.exceptions.cart.CartNotFoundException;
 import com.moulamanager.api.exceptions.cartItem.CartItemAlreadyExistsException;
 import com.moulamanager.api.exceptions.cartItem.CartItemNotFoundException;
+import com.moulamanager.api.exceptions.cartItem.InvalidQuantityException;
 import com.moulamanager.api.models.CartItemModel;
 import com.moulamanager.api.models.ProductModel;
-import com.moulamanager.api.models.UserModel;
 import com.moulamanager.api.repositories.CartItemRepository;
 import com.moulamanager.api.services.AbstractService;
 import com.moulamanager.api.services.cart.CartService;
-import com.moulamanager.api.services.jwt.JwtUtils;
 import com.moulamanager.api.services.product.ProductService;
 import com.moulamanager.api.services.user.UserService;
 import org.springframework.data.domain.Page;
@@ -27,16 +26,14 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
     private final ProductService productService;
     private final CartService cartService;
     private final CartItemRepository cartItemRepository;
-    private final JwtUtils jwtUtils;
 
     private static final String CART_ITEM_NOT_FOUND = "Cart item not found";
 
-    public CartItemService(CartItemRepository cartItemRepository, JwtUtils jwtUtils, UserService userService, ProductService productService, CartService cartService) {
+    public CartItemService(CartItemRepository cartItemRepository, UserService userService, ProductService productService, CartService cartService) {
         this.cartItemRepository = cartItemRepository;
         this.userService = userService;
         this.productService = productService;
         this.cartService = cartService;
-        this.jwtUtils = jwtUtils;
     }
 
     @Override
@@ -48,14 +45,13 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
      * Gets all cart items by user ID.
      *
      * @param pageable The {@link Pageable} to use.
-     * @param userToken The token of the user to get the cart items for.
+     * @param userId The id of the user to get the cart items for.
      * @return A {@link Page} of {@link CartItemModel}s.
      * @throws CartNotFoundException if the cart is not found.
      */
-    public Page<CartItemResultDTO> findAllByUser(Pageable pageable, String userToken) {
-        long userId = jwtUtils.getUserIdFromJwtToken(userToken);
-        UserModel user = findUserById(userId);
-        CartResultDTO cart = findCartByUserIdAndNotCheckedOut(user);
+    public Page<CartItemResultDTO> findAllByUser(Pageable pageable, long userId) {
+        findUserById(userId);
+        CartResultDTO cart = findCartByUserIdAndNotCheckedOut(userId);
         return CartItemResultDTO.fromCartItemModelList(cartItemRepository.findAllByCartId(cart.getId(), pageable));
     }
 
@@ -69,30 +65,6 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
     @Override
     public CartItemResultDTO findById(long id) {
         return mapToCartItemResultDTO(cartItemRepository.findById(id).orElseThrow(() -> new CartItemNotFoundException(CART_ITEM_NOT_FOUND)));
-    }
-
-    /**
-     * Find a cart item by cart ID
-     *
-     * @param cartId The ID of the cart to find
-     * @return The cart item
-     * @throws CartItemNotFoundException If the cart item doesn't exist
-     */
-    @Override
-    public CartItemResultDTO findByCartId(long cartId) {
-        return mapToCartItemResultDTO(cartItemRepository.findByCartId(cartId).orElseThrow(() -> new CartItemNotFoundException(CART_ITEM_NOT_FOUND)));
-    }
-
-    /**
-     * Find a cart item by product ID
-     *
-     * @param productId The ID of the product to find
-     * @return The cart item
-     * @throws CartItemNotFoundException If the cart item doesn't exist
-     */
-    @Override
-    public CartItemResultDTO findByProductId(long productId) {
-        return mapToCartItemResultDTO(cartItemRepository.findByProductId(productId).orElseThrow(() -> new CartItemNotFoundException(CART_ITEM_NOT_FOUND)));
     }
 
     /**
@@ -112,25 +84,25 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
      * Add a product with the given id to the cart of the user with the given token
      *
      * @param productId The id of the product to add
-     * @param userToken The token of the user
+     * @param userId The id of the user
      * @return The created cart item
      */
     @Override
-    public CartItemResultDTO addProductToCart(long productId, String userToken) {
+    public CartItemResultDTO addProductToCart(long productId, long userId) {
         ProductModel product = findProductById(productId);
-        return addProductToCartByUserTokenAndProduct(product, userToken);
+        return addProductToCartByUserIdAndProduct(product, userId);
     }
 
     /**
      * Add a product with the given barcode to the cart of the user with the given token
      *
      * @param barcode   The barcode of the product to add
-     * @param userToken The token of the user
+     * @param userId The id of the user
      * @return The created cart item
      */
-    public CartItemResultDTO addProductToCartWithBarcode(String barcode, String userToken) {
+    public CartItemResultDTO addProductToCartWithBarcode(String barcode, long userId) {
         ProductModel product = productService.findByBarcode(barcode);
-        return addProductToCartByUserTokenAndProduct(product, userToken);
+        return addProductToCartByUserIdAndProduct(product, userId);
     }
 
     /**
@@ -138,28 +110,21 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
      *
      * @param productId The id of the product to update
      * @param quantity  The new quantity
-     * @param userToken The token of the user
+     * @param userId The id of the user
      * @return The updated cart item
      * @throws CartItemNotFoundException If the cart item doesn't exist
      * @throws IllegalArgumentException If the quantity is less than or equal to 0
      * @throws IllegalArgumentException If the quantity is the same as the previous quantity
      */
     @Override
-    public CartItemResultDTO updateProductQuantity(long productId, UpdateCartItemQuantityDTO quantity, String userToken) {
-
+    public CartItemResultDTO updateProductQuantity(long productId, UpdateCartItemQuantityDTO quantity, long userId) {
         validateQuantity(quantity.getQuantity());
-        long userId = jwtUtils.getUserIdFromJwtToken(userToken);
-        UserModel user = findUserById(userId);
-        CartResultDTO cart = findCartByUserIdAndNotCheckedOut(user);
+        findUserById(userId);
+        CartResultDTO cart = findCartByUserIdAndNotCheckedOut(userId);
         CartItemResultDTO cartItem = findByCartIdAndProductId(cart.getId(), productId);
-
         checkIfSameQuantity(quantity.getQuantity(), cartItem);
-
-        double productPrice = cartItem.getProduct().getPrice();
-        double priceDifference = productPrice * (quantity.getQuantity() - cartItem.getQuantity());
         updateCartItemQuantity(cartItem, quantity.getQuantity());
-        updateCartTotalPrice(cart, cart.getTotalPrice() + priceDifference);
-
+        updateCartTotalPrice(cart, cart.getTotalPrice() + calculatePriceDifference(cartItem, quantity.getQuantity()));
         return cartItem;
     }
 
@@ -167,33 +132,32 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
      * Remove the product with the given id from the cart of the user with the given token
      *
      * @param productId The id of the product to remove
-     * @param userToken The token of the user
+     * @param userId The id of the user
      * @throws CartItemNotFoundException If the cart item doesn't exist
      */
     @Override
-    public void removeProductFromCart(long productId, String userToken) {
-        long userId = jwtUtils.getUserIdFromJwtToken(userToken);
-        UserModel user = findUserById(userId);
-        CartResultDTO cart = findCartByUserIdAndNotCheckedOut(user);
+    public void deleteProductFromCart(long productId, long userId) {
+        CartResultDTO cart = getCartForUser(userId);
         CartItemResultDTO cartItem = findByCartIdAndProductId(cart.getId(), productId);
-        updateCartTotalPrice(cart, cart.getTotalPrice() - (cartItem.getProduct().getPrice() * cartItem.getQuantity()));
+        updateCartTotalPrice(cart, cart.getTotalPrice() - calculateTotalPrice(cartItem));
         cartItemRepository.delete(mapToCartItemModel(cartItem));
     }
 
     /**
      * Remove all products from the cart of the user with the given token
      *
-     * @param userToken The token of the user
+     * @param userId The id of the user
      * @throws CartItemNotFoundException If the cart item doesn't exist
      */
     @Transactional
     @Override
-    public void deleteAllProductsFromCart(String userToken) {
-        long userId = jwtUtils.getUserIdFromJwtToken(userToken);
-        UserModel user = findUserById(userId);
-        CartResultDTO cart = findCartByUserIdAndNotCheckedOut(user);
-        updateCartTotalPrice(cart, 0);
+    public void deleteAllProductsFromCart(long userId) {
+        CartResultDTO cart = getCartForUser(userId);
+        if (!cartItemRepository.existsByCartId(cart.getId())) {
+            throw new RuntimeException("Cart is empty");
+        }
         cartItemRepository.deleteAllByCartId(cart.getId());
+        updateCartTotalPrice(cart, 0);
     }
 
     /**
@@ -202,24 +166,13 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
      * If the product already exists in the cart, throw an exception
      *
      * @param product The product to add to the cart
-     * @param userToken The token of the user
+     * @param userId The id of the user
      * @return The created cart item
      * @throws CartItemAlreadyExistsException If the product already exists in the cart
      */
-    private CartItemResultDTO addProductToCartByUserTokenAndProduct(ProductModel product, String userToken) {
-        long userId = jwtUtils.getUserIdFromJwtToken(userToken);
-        UserModel user = findUserById(userId);
-        CartResultDTO cart;
-        try {
-            cart = findCartByUserIdAndNotCheckedOut(user);
-        } catch (CartNotFoundException e) {
-            cart = createNewCart(user);
-        }
-
-        if (cartItemRepository.existsByCartIdAndProductId(cart.getId(), product.getId())) {
-            throw new CartItemAlreadyExistsException("Product with id " + product.getId() + " already exists in cart with id " + cart.getId());
-        }
-
+    private CartItemResultDTO addProductToCartByUserIdAndProduct(ProductModel product, long userId) {
+        CartResultDTO cart = getOrCreateCartForUser(userId);
+        validateProductExistenceInCart(cart, product);
         CartItemModel cartItem = getOrCreateCartItemForProductInCart(product, cart);
         updateCartTotalPrice(cart, cart.getTotalPrice() + product.getPrice());
         return mapToCartItemResultDTO(cartItem);
@@ -227,13 +180,13 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
 
     private void validateQuantity(int quantity) {
         if (quantity <= 0) {
-            throw new IllegalArgumentException("Quantity must be greater than 0");
+            throw new InvalidQuantityException("Quantity must be greater than 0");
         }
     }
 
     private void checkIfSameQuantity(int quantity, CartItemResultDTO cartItem) {
         if (cartItem.getQuantity() == quantity) {
-            throw new IllegalArgumentException("Quantity is same as previous quantity");
+            throw new InvalidQuantityException("Quantity is same as previous quantity");
         }
     }
 
@@ -242,20 +195,48 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
         return jwtUtils.getUserIdFromJwtToken(token);
     }*/
 
-    private UserModel findUserById(long userId) {
-        return userService.findById(userId);
+    private void findUserById(long userId) {
+        userService.findById(userId);
+    }
+
+    private CartResultDTO getCartForUser(long userId) {
+        findUserById(userId);
+        return findCartByUserIdAndNotCheckedOut(userId);
     }
 
     private ProductModel findProductById(long productId) {
         return productService.findById(productId);
     }
 
-    private CartResultDTO findCartByUserIdAndNotCheckedOut(UserModel user) {
-        return cartService.findByUserIdAndCheckedOut(user.getId(), false);
+    private CartResultDTO findCartByUserIdAndNotCheckedOut(long userId) {
+        return cartService.findByUserIdAndCheckedOut(userId, false);
     }
 
-    private CartResultDTO createNewCart(UserModel user) {
-        return cartService.save(user.getId());
+    private CartResultDTO getOrCreateCartForUser(long userId) {
+        try {
+            return findCartByUserIdAndNotCheckedOut(userId);
+        } catch (CartNotFoundException e) {
+            return createNewCart(userId);
+        }
+    }
+
+    private void validateProductExistenceInCart(CartResultDTO cart, ProductModel product) {
+        if (cartItemRepository.existsByCartIdAndProductId(cart.getId(), product.getId())) {
+            throw new CartItemAlreadyExistsException("Product with id " + product.getId() + " already exists in cart with id " + cart.getId());
+        }
+    }
+
+    private double calculatePriceDifference(CartItemResultDTO cartItem, int newQuantity) {
+        double productPrice = cartItem.getProduct().getPrice();
+        return productPrice * (newQuantity - cartItem.getQuantity());
+    }
+
+    private double calculateTotalPrice(CartItemResultDTO cartItem) {
+        return cartItem.getProduct().getPrice() * cartItem.getQuantity();
+    }
+
+    private CartResultDTO createNewCart(long userId) {
+        return cartService.save(userId);
     }
 
     private CartItemModel getOrCreateCartItemForProductInCart(ProductModel product, CartResultDTO cart) {
@@ -267,7 +248,6 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
         CartItemModel newCartItem = new CartItemModel();
         newCartItem.setProduct(product);
         newCartItem.setCart(CartResultDTO.toCartModel(cart));
-        newCartItem.setQuantity(1);
         newCartItem.getCart().setTotalPrice(newCartItem.getCart().getTotalPrice() + product.getPrice());
         return cartItemRepository.save(newCartItem);
     }

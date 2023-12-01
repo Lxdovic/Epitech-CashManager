@@ -8,26 +8,21 @@ import org.springframework.data.domain.Pageable;
 
 public interface ICartItemService {
 
+    // Find methods
     Page<CartItemResultDTO> findAll(Pageable pageable);
-
-    Page<CartItemResultDTO> findAllByUser(Pageable pageable, String token);
-
+    Page<CartItemResultDTO> findAllByUser(Pageable pageable, long userId);
     CartItemResultDTO findById(long id);
-
-    CartItemResultDTO findByCartId(long cartId);
-
-    CartItemResultDTO findByProductId(long productId);
-
     CartItemResultDTO findByCartIdAndProductId(long cartId, long productId);
 
-    CartItemResultDTO addProductToCart(long productId, String token);
+    // Add methods
+    CartItemResultDTO addProductToCart(long productId, long userId);
+    CartItemResultDTO addProductToCartWithBarcode(String barcode, long userId);
 
-    CartItemResultDTO addProductToCartWithBarcode(String barcode, String token);
+    // Update methods
+    CartItemResultDTO updateProductQuantity(long productId, UpdateCartItemQuantityDTO quantity, long userId);
 
-    CartItemResultDTO updateProductQuantity(long productId, UpdateCartItemQuantityDTO quantity, String token);
-
-    void removeProductFromCart(long productId, String token);
-
-    void deleteAllProductsFromCart(String token);
+    // Delete methods
+    void deleteProductFromCart(long productId, long userId);
+    void deleteAllProductsFromCart(long userId);
 
 }
