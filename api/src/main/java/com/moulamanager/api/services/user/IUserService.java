@@ -1,6 +1,10 @@
 package com.moulamanager.api.services.user;
 
+import com.moulamanager.api.dto.user.request.LoginRequestDTO;
+import com.moulamanager.api.dto.user.result.LoginResultDTO;
+import com.moulamanager.api.dto.user.result.UserResultDTO;
 import com.moulamanager.api.models.UserModel;
+import com.moulamanager.api.dto.user.request.CreateUserRequestDTO;
 
 import java.util.List;
 
@@ -10,7 +14,9 @@ public interface IUserService {
 
     UserModel findById(long id);
 
-    UserModel save(UserModel user);
+    UserResultDTO createUser(CreateUserRequestDTO signUpRequest);
+
+    LoginResultDTO authenticateUser(LoginRequestDTO loginRequest);
 
     UserModel update(UserModel user);
 

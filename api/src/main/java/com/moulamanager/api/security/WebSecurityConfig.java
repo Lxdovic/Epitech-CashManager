@@ -1,8 +1,9 @@
 package com.moulamanager.api.security;
 
-import com.moulamanager.api.services.UserDetailsServiceImpl;
 import com.moulamanager.api.services.jwt.AuthEntryPointJwt;
 import com.moulamanager.api.services.jwt.AuthTokenFilter;
+import com.moulamanager.api.services.user.UserDetailsServiceImpl;
+import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -20,16 +21,12 @@ import org.springframework.context.annotation.Bean;
 // TEMA LA TAILLE DES IMPORTS
 
 @Configuration
+@AllArgsConstructor
 @EnableMethodSecurity
 public class WebSecurityConfig {
     private final UserDetailsServiceImpl userDetailsService;
 
     private final AuthEntryPointJwt unauthorizedHandler;
-
-    public WebSecurityConfig(UserDetailsServiceImpl userDetailsService, AuthEntryPointJwt unauthorizedHandler) {
-        this.userDetailsService = userDetailsService;
-        this.unauthorizedHandler = unauthorizedHandler;
-    }
 
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {

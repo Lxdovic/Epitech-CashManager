@@ -8,10 +8,12 @@ import com.moulamanager.api.exceptions.cartItem.CartItemNotFoundException;
 import com.moulamanager.api.exceptions.cartItem.InvalidQuantityException;
 import com.moulamanager.api.exceptions.product.ProductAlreadyExistsException;
 import com.moulamanager.api.exceptions.product.ProductNotFoundException;
+import com.moulamanager.api.exceptions.user.UserAlreadyExistsException;
 import com.moulamanager.api.exceptions.user.UserNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -80,10 +82,10 @@ public class GlobalExceptionHandler {
         return buildResponseException(exception.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(value = RuntimeException.class)
-    public ResponseEntity<Object> handleRuntimeException(RuntimeException exception) {
-        logger.error("Runtime exception: {}", exception.getMessage());
-        return buildResponseException(exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    @ExceptionHandler(value = UserAlreadyExistsException.class)
+    public ResponseEntity<Object> handleUserAlreadyExistsException(UserAlreadyExistsException exception) {
+        logger.error("User already exists exception: {}", exception.getMessage());
+        return buildResponseException(exception.getMessage(), HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(value = ConstraintViolationException.class)
@@ -93,10 +95,16 @@ public class GlobalExceptionHandler {
         return buildResponseException(errorMessage, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(value = DataIntegrityViolationException.class)
+    public ResponseEntity<Object> handleDataIntegrityViolationException(org.springframework.dao.DataIntegrityViolationException exception) {
+        logger.error("Data integrity violation exception: {}", exception.getMessage());
+        String errorMessage = exception.getMostSpecificCause().getMessage();
+        return buildResponseException(errorMessage, HttpStatus.CONFLICT);
+    }
+
     private ResponseEntity<Object> buildResponseException(String exception, HttpStatus httpStatus) {
         ErrorResponse errorResponse = new ErrorResponse(new Date(), exception, httpStatus.getReasonPhrase());
         return new ResponseEntity<>(errorResponse, httpStatus);
     }
-
 
 }
