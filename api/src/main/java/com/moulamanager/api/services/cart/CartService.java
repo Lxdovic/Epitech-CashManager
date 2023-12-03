@@ -9,22 +9,19 @@ import com.moulamanager.api.models.UserModel;
 import com.moulamanager.api.repositories.CartRepository;
 import com.moulamanager.api.repositories.UserRepository;
 import com.moulamanager.api.services.AbstractService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class CartService extends AbstractService<CartModel> implements ICartService {
 
     private final CartRepository cartRepository;
     private final UserRepository userRepository;
     private final String CART_NOT_FOUND = "Cart not found";
-
-    public CartService(CartRepository cartRepository, UserRepository userRepository) {
-        this.cartRepository = cartRepository;
-        this.userRepository = userRepository;
-    }
 
     @Override
     public Page<CartResultDTO> findAll(Pageable pageable) {
