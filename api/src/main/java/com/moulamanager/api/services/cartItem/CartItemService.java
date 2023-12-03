@@ -14,12 +14,14 @@ import com.moulamanager.api.services.AbstractService;
 import com.moulamanager.api.services.cart.CartService;
 import com.moulamanager.api.services.product.ProductService;
 import com.moulamanager.api.services.user.UserService;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@AllArgsConstructor
 public class CartItemService extends AbstractService<CartItemModel> implements ICartItemService {
 
     private final UserService userService;
@@ -28,13 +30,9 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
     private final CartItemRepository cartItemRepository;
 
     private static final String CART_ITEM_NOT_FOUND = "Cart item not found";
+    private static final String QUANTITY_IS_SAME_AS_PREVIOUS = "Quantity is same as previous quantity";
+    private static final String PRODUCT_ALREADY_EXISTS_IN_CART = "Product with id %d already exists in cart with id %d";
 
-    public CartItemService(CartItemRepository cartItemRepository, UserService userService, ProductService productService, CartService cartService) {
-        this.cartItemRepository = cartItemRepository;
-        this.userService = userService;
-        this.productService = productService;
-        this.cartService = cartService;
-    }
 
     @Override
     public Page<CartItemResultDTO> findAll(Pageable pageable) {
@@ -87,10 +85,11 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
      * @param userId The id of the user
      * @return The created cart item
      */
+    @Transactional
     @Override
     public CartItemResultDTO addProductToCart(long productId, long userId) {
         ProductModel product = findProductById(productId);
-        return addProductToCartByUserIdAndProduct(product, userId);
+        return addProductToCart(product, userId);
     }
 
     /**
@@ -102,7 +101,7 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
      */
     public CartItemResultDTO addProductToCartWithBarcode(String barcode, long userId) {
         ProductModel product = productService.findByBarcode(barcode);
-        return addProductToCartByUserIdAndProduct(product, userId);
+        return addProductToCart(product, userId);
     }
 
     /**
@@ -118,7 +117,6 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
      */
     @Override
     public CartItemResultDTO updateProductQuantity(long productId, UpdateCartItemQuantityDTO quantity, long userId) {
-        validateQuantity(quantity.getQuantity());
         findUserById(userId);
         CartResultDTO cart = findCartByUserIdAndNotCheckedOut(userId);
         CartItemResultDTO cartItem = findByCartIdAndProductId(cart.getId(), productId);
@@ -170,23 +168,17 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
      * @return The created cart item
      * @throws CartItemAlreadyExistsException If the product already exists in the cart
      */
-    private CartItemResultDTO addProductToCartByUserIdAndProduct(ProductModel product, long userId) {
+    private CartItemResultDTO addProductToCart(ProductModel product, long userId) {
         CartResultDTO cart = getOrCreateCartForUser(userId);
-        validateProductExistenceInCart(cart, product);
+        checkProductExistsInCart(cart, product);
         CartItemModel cartItem = getOrCreateCartItemForProductInCart(product, cart);
         updateCartTotalPrice(cart, cart.getTotalPrice() + product.getPrice());
         return mapToCartItemResultDTO(cartItem);
     }
 
-    private void validateQuantity(int quantity) {
-        if (quantity <= 0) {
-            throw new InvalidQuantityException("Quantity must be greater than 0");
-        }
-    }
-
     private void checkIfSameQuantity(int quantity, CartItemResultDTO cartItem) {
         if (cartItem.getQuantity() == quantity) {
-            throw new InvalidQuantityException("Quantity is same as previous quantity");
+            throw new InvalidQuantityException(QUANTITY_IS_SAME_AS_PREVIOUS);
         }
     }
 
@@ -220,9 +212,9 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
         }
     }
 
-    private void validateProductExistenceInCart(CartResultDTO cart, ProductModel product) {
+    private void checkProductExistsInCart(CartResultDTO cart, ProductModel product) {
         if (cartItemRepository.existsByCartIdAndProductId(cart.getId(), product.getId())) {
-            throw new CartItemAlreadyExistsException("Product with id " + product.getId() + " already exists in cart with id " + cart.getId());
+            throw new CartItemAlreadyExistsException(String.format(PRODUCT_ALREADY_EXISTS_IN_CART, product.getId(), cart.getId()));
         }
     }
 
