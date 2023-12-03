@@ -5,21 +5,20 @@ import com.moulamanager.api.exceptions.product.ProductNotFoundException;
 import com.moulamanager.api.models.ProductModel;
 import com.moulamanager.api.repositories.ProductRepository;
 import com.moulamanager.api.services.AbstractService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class ProductService extends AbstractService<ProductModel> implements IProductService {
 
     private final ProductRepository productRepository;
 
     private final String PRODUCT_NOT_FOUND = "Product not found";
 
-    public ProductService(ProductRepository productRepository) {
-        this.productRepository = productRepository;
-    }
 
     @Override
     public Page<ProductModel> findAll(Pageable pageable) {
