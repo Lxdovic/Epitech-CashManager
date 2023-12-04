@@ -2,7 +2,6 @@ package com.moulamanager.api.services.user;
 
 import com.moulamanager.api.models.UserModel;
 import com.moulamanager.api.repositories.UserRepository;
-import com.moulamanager.api.services.UserDetailsImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

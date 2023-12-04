@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,8 +20,7 @@ public class CartController {
     private final CartService cartService;
 
     @GetMapping
-    public ResponseEntity<Page<CartResultDTO>> getAllCarts(@RequestParam(defaultValue = "0") int page,
-                                                           @RequestParam(defaultValue = "10") int size) {
+    public ResponseEntity<Page<CartResultDTO>> getAllCarts(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
         return ResponseEntity.ok(cartService.findAll(pageable));
     }
@@ -32,7 +32,7 @@ public class CartController {
 
     @PostMapping("/{userId}")
     public ResponseEntity<CartResultDTO> createCart(@PathVariable long userId) {
-        return ResponseEntity.ok(cartService.save(userId));
+        return new ResponseEntity<>(cartService.save(userId), HttpStatus.CREATED);
     }
 
     @PatchMapping("/{id}")

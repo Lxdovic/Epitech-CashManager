@@ -1,4 +1,4 @@
-package com.moulamanager.api.services;
+package com.moulamanager.api.services.user;
 
 import java.io.Serial;
 import java.util.Collection;

@@ -6,6 +6,7 @@ import com.moulamanager.api.dto.user.result.LoginResultDTO;
 import com.moulamanager.api.dto.user.result.UserResultDTO;
 import com.moulamanager.api.services.user.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,6 +30,6 @@ public class AuthController {
     @PostMapping("/sign-up")
     public ResponseEntity<UserResultDTO> registerUser(@RequestBody CreateUserRequestDTO signUpRequest) {
         UserResultDTO userResult = userService.createUser(signUpRequest);
-        return ResponseEntity.ok(userResult);
+        return new ResponseEntity<>(userResult, HttpStatus.CREATED);
     }
 }

@@ -3,7 +3,7 @@ package com.moulamanager.api.services.jwt;
 import java.security.Key;
 import java.util.Date;
 
-import com.moulamanager.api.services.UserDetailsImpl;
+import com.moulamanager.api.services.user.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;

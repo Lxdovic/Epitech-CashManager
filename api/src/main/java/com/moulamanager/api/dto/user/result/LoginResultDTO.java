@@ -1,6 +1,6 @@
 package com.moulamanager.api.dto.user.result;
 
-import com.moulamanager.api.services.UserDetailsImpl;
+import com.moulamanager.api.services.user.UserDetailsImpl;
 import lombok.Data;
 
 @Data

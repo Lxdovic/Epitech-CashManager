@@ -9,7 +9,6 @@ import com.moulamanager.api.models.UserModel;
 import com.moulamanager.api.dto.user.request.CreateUserRequestDTO;
 import com.moulamanager.api.repositories.UserRepository;
 import com.moulamanager.api.services.AbstractService;
-import com.moulamanager.api.services.UserDetailsImpl;
 import com.moulamanager.api.services.jwt.JwtUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;

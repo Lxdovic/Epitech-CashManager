@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -76,13 +77,13 @@ public class CartItemController {
     @PostMapping("/{productId}")
     public ResponseEntity<CartItemResultDTO> addProductToCart(@PathVariable long productId, @RequestHeader("Authorization") String userToken) {
         long userId = jwtUtils.getUserIdFromJwtToken(userToken);
-        return ResponseEntity.ok(cartItemService.addProductToCart(productId, userId));
+        return new ResponseEntity<>(cartItemService.addProductToCart(productId, userId), HttpStatus.CREATED);
     }
 
     @PostMapping("/barcode/{barcode}")
     public ResponseEntity<CartItemResultDTO> addProductToCartWithBarcode(@PathVariable String barcode, @RequestHeader("Authorization") String userToken) {
         long userId = jwtUtils.getUserIdFromJwtToken(userToken);
-        return ResponseEntity.ok(cartItemService.addProductToCartWithBarcode(barcode, userId));
+        return new ResponseEntity<>(cartItemService.addProductToCartWithBarcode(barcode, userId), HttpStatus.CREATED);
     }
 
 
