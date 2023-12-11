@@ -10,13 +10,12 @@ import androidx.navigation.NavController
 @Composable
 fun NavbarComponent(
     navController: NavController,
-    gameViewModel: NavbarViewModel = viewModel()
+    navViewModel: NavbarViewModel = viewModel()
 ) {
-
     NavigationBar {
         var selectedItemIndex by rememberSaveable { mutableIntStateOf(0) }
 
-        gameViewModel.items.forEachIndexed() { index, item ->
+        navViewModel.items.forEachIndexed() { index, item ->
             NavigationBarItem(
                 selected = selectedItemIndex == index,
                 onClick = {
@@ -51,6 +50,4 @@ fun NavbarComponent(
             )
         }
     }
-
-
 }

@@ -8,7 +8,6 @@ import com.example.moulamanagerclient.data.model.nav.NavbarItem
 
 class NavbarViewModel: ViewModel() {
     val items = listOf(
-
         NavbarItem(
             title = "Cart",
             route = "cart",
