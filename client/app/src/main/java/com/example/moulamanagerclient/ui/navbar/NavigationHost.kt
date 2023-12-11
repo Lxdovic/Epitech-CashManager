@@ -1,8 +1,6 @@
 package com.example.moulamanagerclient.ui.navbar
 
 import CheckoutComponent
-import com.example.moulamanagerclient.ui.cart.CartComponent
-import LoginComponent
 import ScanComponent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -13,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.moulamanagerclient.ui.cart.CartComponent
 import com.example.moulamanagerclient.ui.home.NavbarComponent
 
 
@@ -26,9 +25,9 @@ fun NavigationHost(navigationController: NavHostController) {
 ) {
     Column(Modifier.padding(it)) {
         NavHost(navController = navigationController, startDestination = "cart") {
-            composable("logout") {
-                LoginComponent(navigationController)
-            }
+//            composable("logout") {
+//                LoginActivity(navigationController)
+//            }
 
             composable("cart") {
                 CartComponent(navigationController)

@@ -3,14 +3,11 @@ package com.example.moulamanagerclient
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavBackStackEntry
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import com.example.moulamanagerclient.ui.navbar.NavigationHost
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.ui.Modifier
+import com.example.moulamanagerclient.ui.login.LoginActivity
 import com.example.moulamanagerclient.ui.theme.MoulamanagerclientTheme
 
 class MainActivity : ComponentActivity() {
@@ -18,18 +15,12 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MoulamanagerclientTheme {
-                NavigationHost(rememberNavController())
+                // A surface container using the 'background' color from the theme
+                Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
+//                    Greeting("Android")
+                    LoginActivity();
+                }
             }
         }
     }
-}
-
-@Composable
-inline fun <reified T: ViewModel> NavBackStackEntry.sharedViewModel(navController: NavController): T {
-    val navGraphRoute = destination.parent?.route ?: return viewModel()
-    val parentEntry = remember(this) {
-        navController.getBackStackEntry(navGraphRoute)
-    }
-
-    return viewModel(parentEntry)
 }
