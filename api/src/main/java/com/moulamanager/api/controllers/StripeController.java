@@ -29,7 +29,7 @@ public class StripeController {
         try {
             long userId = jwtUtils.getUserIdFromJwtToken(userToken);
             PaymentIntent paymentIntent = stripeService.createPaymentIntent(userId, "eur");
-            return ResponseEntity.ok(PaymentIntentResultDTO.builder().paymentIntentId(paymentIntent.getId()).build());
+            return ResponseEntity.ok(PaymentIntentResultDTO.fromPaymentIntent(paymentIntent));
         } catch (StripeException e) {
             System.err.printf(String.format(STRIPE_EXCEPTION, e.getMessage()));
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
