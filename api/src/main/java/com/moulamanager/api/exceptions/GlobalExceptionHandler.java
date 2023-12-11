@@ -8,6 +8,7 @@ import com.moulamanager.api.exceptions.cartItem.CartItemNotFoundException;
 import com.moulamanager.api.exceptions.cartItem.InvalidQuantityException;
 import com.moulamanager.api.exceptions.product.ProductAlreadyExistsException;
 import com.moulamanager.api.exceptions.product.ProductNotFoundException;
+import com.moulamanager.api.exceptions.stripe.CustomerNotFoundException;
 import com.moulamanager.api.exceptions.user.UserAlreadyExistsException;
 import com.moulamanager.api.exceptions.user.UserNotFoundException;
 import jakarta.validation.ConstraintViolationException;
@@ -86,6 +87,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Object> handleUserAlreadyExistsException(UserAlreadyExistsException exception) {
         logger.error("User already exists exception: {}", exception.getMessage());
         return buildResponseException(exception.getMessage(), HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(value = CustomerNotFoundException.class)
+    public ResponseEntity<Object> handleCustomerNotFoundException(CustomerNotFoundException exception) {
+        logger.error("Customer not found exception: {}", exception.getMessage());
+        return buildResponseException(exception.getMessage(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(value = ConstraintViolationException.class)

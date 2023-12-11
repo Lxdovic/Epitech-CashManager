@@ -43,7 +43,7 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
      * Gets all cart items by user ID.
      *
      * @param pageable The {@link Pageable} to use.
-     * @param userId The id of the user to get the cart items for.
+     * @param userId   The id of the user to get the cart items for.
      * @return A {@link Page} of {@link CartItemModel}s.
      * @throws CartNotFoundException if the cart is not found.
      */
@@ -82,7 +82,7 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
      * Add a product with the given id to the cart of the user with the given token
      *
      * @param productId The id of the product to add
-     * @param userId The id of the user
+     * @param userId    The id of the user
      * @return The created cart item
      */
     @Transactional
@@ -95,8 +95,8 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
     /**
      * Add a product with the given barcode to the cart of the user with the given token
      *
-     * @param barcode   The barcode of the product to add
-     * @param userId The id of the user
+     * @param barcode The barcode of the product to add
+     * @param userId  The id of the user
      * @return The created cart item
      */
     public CartItemResultDTO addProductToCartWithBarcode(String barcode, long userId) {
@@ -109,20 +109,26 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
      *
      * @param productId The id of the product to update
      * @param quantity  The new quantity
-     * @param userId The id of the user
+     * @param userId    The id of the user
      * @return The updated cart item
      * @throws CartItemNotFoundException If the cart item doesn't exist
-     * @throws IllegalArgumentException If the quantity is less than or equal to 0
-     * @throws IllegalArgumentException If the quantity is the same as the previous quantity
+     * @throws IllegalArgumentException  If the quantity is less than or equal to 0
+     * @throws IllegalArgumentException  If the quantity is the same as the previous quantity
      */
     @Override
     public CartItemResultDTO updateProductQuantity(long productId, UpdateCartItemQuantityDTO quantity, long userId) {
+
         findUserById(userId);
+
         CartResultDTO cart = findCartByUserIdAndNotCheckedOut(userId);
         CartItemResultDTO cartItem = findByCartIdAndProductId(cart.getId(), productId);
         checkIfSameQuantity(quantity.getQuantity(), cartItem);
+
+        double priceDifference = calculatePriceDifference(cartItem, quantity.getQuantity());
         updateCartItemQuantity(cartItem, quantity.getQuantity());
-        updateCartTotalPrice(cart, cart.getTotalPrice() + calculatePriceDifference(cartItem, quantity.getQuantity()));
+        updateCartTotalPrice(cart, cart.getTotalPrice() + priceDifference);
+        cartItem.getCart().setTotalPrice(cart.getTotalPrice());
+
         return cartItem;
     }
 
@@ -130,7 +136,7 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
      * Remove the product with the given id from the cart of the user with the given token
      *
      * @param productId The id of the product to remove
-     * @param userId The id of the user
+     * @param userId    The id of the user
      * @throws CartItemNotFoundException If the cart item doesn't exist
      */
     @Override
@@ -164,7 +170,7 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
      * If the product already exists in the cart, throw an exception
      *
      * @param product The product to add to the cart
-     * @param userId The id of the user
+     * @param userId  The id of the user
      * @return The created cart item
      * @throws CartItemAlreadyExistsException If the product already exists in the cart
      */
@@ -220,7 +226,8 @@ public class CartItemService extends AbstractService<CartItemModel> implements I
 
     private double calculatePriceDifference(CartItemResultDTO cartItem, int newQuantity) {
         double productPrice = cartItem.getProduct().getPrice();
-        return productPrice * (newQuantity - cartItem.getQuantity());
+        int oldQuantity = cartItem.getQuantity();
+        return productPrice * (newQuantity - oldQuantity);
     }
 
     private double calculateTotalPrice(CartItemResultDTO cartItem) {

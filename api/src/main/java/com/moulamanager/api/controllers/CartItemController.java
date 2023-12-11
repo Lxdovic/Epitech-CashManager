@@ -6,6 +6,7 @@ import com.moulamanager.api.models.CartItemModel;
 import com.moulamanager.api.services.cartItem.CartItemService;
 import com.moulamanager.api.services.jwt.JwtUtils;
 import lombok.AllArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -77,13 +78,13 @@ public class CartItemController {
     @PostMapping("/{productId}")
     public ResponseEntity<CartItemResultDTO> addProductToCart(@PathVariable long productId, @RequestHeader("Authorization") String userToken) {
         long userId = jwtUtils.getUserIdFromJwtToken(userToken);
-        return new ResponseEntity<>(cartItemService.addProductToCart(productId, userId), HttpStatus.CREATED);
+        return ResponseEntity.ok(cartItemService.addProductToCart(productId, userId));
     }
 
     @PostMapping("/barcode/{barcode}")
     public ResponseEntity<CartItemResultDTO> addProductToCartWithBarcode(@PathVariable String barcode, @RequestHeader("Authorization") String userToken) {
         long userId = jwtUtils.getUserIdFromJwtToken(userToken);
-        return new ResponseEntity<>(cartItemService.addProductToCartWithBarcode(barcode, userId), HttpStatus.CREATED);
+        return ResponseEntity.ok(cartItemService.addProductToCartWithBarcode(barcode, userId));
     }
 
 

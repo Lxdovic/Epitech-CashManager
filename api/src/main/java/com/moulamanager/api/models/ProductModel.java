@@ -38,7 +38,4 @@ public class ProductModel {
     @Pattern(regexp = "[0-9]+", message = "Barcode must contain only numbers")
     private String barcode;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CartItemModel> cartItems;
 }

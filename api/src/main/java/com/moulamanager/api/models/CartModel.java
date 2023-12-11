@@ -38,8 +38,4 @@ public class CartModel {
     @Min(value = 0, message = "Total price can't be negative")
     private double totalPrice = 0.0;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CartItemModel> cartItems;
-
 }
