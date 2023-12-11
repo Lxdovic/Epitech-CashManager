@@ -28,8 +28,8 @@ public class AuthController {
     }
 
     @PostMapping("/sign-up")
-    public ResponseEntity<UserResultDTO> registerUser(@RequestBody CreateUserRequestDTO signUpRequest) {
-        UserResultDTO userResult = userService.createUser(signUpRequest);
+    public ResponseEntity<LoginResultDTO> registerUser(@RequestBody CreateUserRequestDTO signUpRequest) {
+        LoginResultDTO userResult = userService.registerUser(signUpRequest);
         return new ResponseEntity<>(userResult, HttpStatus.CREATED);
     }
 }

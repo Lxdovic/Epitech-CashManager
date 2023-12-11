@@ -14,7 +14,7 @@ public interface IUserService {
 
     UserModel findById(long id);
 
-    UserResultDTO createUser(CreateUserRequestDTO signUpRequest);
+    LoginResultDTO registerUser(CreateUserRequestDTO signUpRequest);
 
     LoginResultDTO authenticateUser(LoginRequestDTO loginRequest);
 

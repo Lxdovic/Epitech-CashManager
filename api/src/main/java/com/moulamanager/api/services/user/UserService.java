@@ -2,7 +2,6 @@ package com.moulamanager.api.services.user;
 
 import com.moulamanager.api.dto.user.request.LoginRequestDTO;
 import com.moulamanager.api.dto.user.result.LoginResultDTO;
-import com.moulamanager.api.dto.user.result.UserResultDTO;
 import com.moulamanager.api.exceptions.user.UserAlreadyExistsException;
 import com.moulamanager.api.exceptions.user.UserNotFoundException;
 import com.moulamanager.api.models.UserModel;
@@ -43,31 +42,16 @@ public class UserService extends AbstractService<UserModel> implements IUserServ
     }
 
     @Override
-    public UserResultDTO createUser(CreateUserRequestDTO signUpRequest) {
+    public LoginResultDTO registerUser(CreateUserRequestDTO signUpRequest) {
         checkIfUserWithSameEmailExists(signUpRequest.getEmail());
-        UserModel user = createNewUser(signUpRequest);
-        return mapToUserResultDTO(user);
+
+        createNewUser(signUpRequest);
+
+        return authenticateUserWithToken(signUpRequest.getUsername(), signUpRequest.getPassword());
     }
 
     public LoginResultDTO authenticateUser(LoginRequestDTO loginRequest) {
-        Authentication authentication = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtils.generateJwtToken(authentication);
-
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        return new LoginResultDTO(jwt, userDetails);
-    }
-
-    private UserModel createNewUser(CreateUserRequestDTO signUpRequest) {
-        UserModel user = UserModel.builder()
-                .username(signUpRequest.getUsername())
-                .email(signUpRequest.getEmail())
-                .password(encoder.encode(signUpRequest.getPassword()))
-                .build();
-        userRepository.save(user);
-        return user;
+        return authenticateUserWithToken(loginRequest.getUsername(), loginRequest.getPassword());
     }
 
     @Override
@@ -83,13 +67,28 @@ public class UserService extends AbstractService<UserModel> implements IUserServ
         userRepository.deleteById(id);
     }
 
+    private void createNewUser(CreateUserRequestDTO signUpRequest) {
+        UserModel user = UserModel.builder()
+                .username(signUpRequest.getUsername())
+                .email(signUpRequest.getEmail())
+                .password(encoder.encode(signUpRequest.getPassword()))
+                .build();
+        userRepository.save(user);
+    }
+
+    private LoginResultDTO authenticateUserWithToken(String username, String password) {
+        Authentication authentication = authenticationManager
+                .authenticate(new UsernamePasswordAuthenticationToken(username, password));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = jwtUtils.generateJwtToken(authentication);
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        return new LoginResultDTO(jwt, userDetails);
+    }
+
     private void checkIfUserWithSameEmailExists(String email) {
         if (userRepository.existsByEmail(email)) {
             throw new UserAlreadyExistsException(String.format(USER_WITH_EMAIL_EXISTS, email));
         }
     }
 
-    private UserResultDTO mapToUserResultDTO(UserModel user) {
-        return UserResultDTO.fromUserModel(user);
-    }
 }
