@@ -3,6 +3,7 @@ package com.moulamanager.api.services.stripe;
 import com.moulamanager.api.dto.cart.result.CartResultDTO;
 import com.moulamanager.api.dto.user.result.UserResultDTO;
 import com.moulamanager.api.services.cart.CartService;
+import com.moulamanager.api.services.cartItem.CartItemService;
 import com.moulamanager.api.services.user.UserService;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
@@ -18,16 +19,17 @@ public class StripeService {
 
     private final CustomerService customerService;
     private final UserService userService;
-    private final CartService cartService;
+    private final CartItemService cartItemService;
 
     @Value("${stripe.secret.key}")
     private String stripeSecretKey;
 
-    public StripeService(CustomerService customerService, UserService userService, CartService cartService) {
+    public StripeService(CustomerService customerService, UserService userService, CartItemService cartItemService) {
         this.customerService = customerService;
         this.userService = userService;
-        this.cartService = cartService;
+        this.cartItemService = cartItemService;
     }
+
     @PostConstruct
     public void init() {
         Stripe.apiKey = stripeSecretKey;
@@ -35,10 +37,10 @@ public class StripeService {
 
     public PaymentIntent createPaymentIntent(long userId, String currency) throws StripeException {
         UserResultDTO user = UserResultDTO.fromUserModel(userService.findById(userId));
-        long calculatedAmount = calculateOrderAmount(userId);
+        double calculatedAmount = calculateOrderAmount(userId);
         PaymentIntentCreateParams params =
                 PaymentIntentCreateParams.builder()
-                        .setAmount(calculatedAmount)
+                        .setAmount((long) calculatedAmount * 100)
                         .setCurrency(currency)
                         .setCustomer(customerService.findOrCreateCustomer(user.getEmail(), user.getUsername()).getId())
                         .build();
@@ -46,9 +48,8 @@ public class StripeService {
         return PaymentIntent.create(params);
     }
 
-    private long calculateOrderAmount(long userId) {
-        CartResultDTO currentUserCart = cartService.findByUserId(userId);
-        return (long) (currentUserCart.getTotalPrice() * 100);
+    private double calculateOrderAmount(long userId) {
+        return cartItemService.calculateCartTotalPrice(userId);
     }
 
 }

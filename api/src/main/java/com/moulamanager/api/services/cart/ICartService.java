@@ -19,7 +19,5 @@ public interface ICartService {
 
     CartResultDTO update(CartModel cart);
 
-    CartResultDTO updateCartTotalPrice(long cartId, double totalPrice);
-
     void delete(long id);
 }

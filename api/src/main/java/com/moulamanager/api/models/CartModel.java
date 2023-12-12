@@ -34,8 +34,4 @@ public class CartModel {
     @Column(name = "is_checked_out")
     private boolean checkedOut = false;
 
-    @Column(name = "total_price")
-    @Min(value = 0, message = "Total price can't be negative")
-    private double totalPrice = 0.0;
-
 }

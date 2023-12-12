@@ -66,13 +66,6 @@ public class CartService extends AbstractService<CartModel> implements ICartServ
     }
 
     @Override
-    public CartResultDTO updateCartTotalPrice(long cartId, double totalPrice) {
-        CartModel cartModel = cartRepository.findById(cartId).orElseThrow(() -> new CartNotFoundException(CART_NOT_FOUND));
-        cartModel.setTotalPrice(totalPrice);
-        return CartResultDTO.fromCartModel(cartRepository.save(cartModel));
-    }
-
-    @Override
     public void delete(long id) {
         if (!cartRepository.existsById(id)) {
             throw new CartNotFoundException(CART_NOT_FOUND);

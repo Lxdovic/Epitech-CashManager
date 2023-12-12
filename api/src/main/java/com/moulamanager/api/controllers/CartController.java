@@ -41,11 +41,6 @@ public class CartController {
         return ResponseEntity.ok(cartService.update(cart));
     }
 
-    @PatchMapping("/{cartId}/total-price")
-    public ResponseEntity<CartResultDTO> updateCartTotalPrice(@RequestBody UpdateCartTotalPriceRequestDTO cart, @PathVariable long cartId) {
-        return ResponseEntity.ok(cartService.updateCartTotalPrice(cartId, cart.getTotalPrice()));
-    }
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCart(@PathVariable long id) {
         cartService.delete(id);

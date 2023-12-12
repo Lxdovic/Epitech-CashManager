@@ -15,7 +15,6 @@ public class CartResultDTO {
     private long userId;
     private Date createdAt;
     private boolean checkedOut;
-    private double totalPrice;
 
     public static CartResultDTO fromCartModel(CartModel cart) {
         return CartResultDTO.builder()
@@ -23,7 +22,6 @@ public class CartResultDTO {
                 .userId(cart.getUser().getId())
                 .createdAt(cart.getCreatedAt())
                 .checkedOut(cart.isCheckedOut())
-                .totalPrice(cart.getTotalPrice())
                 .build();
     }
 
@@ -37,7 +35,6 @@ public class CartResultDTO {
                 .user(UserModel.builder().id(cartResultDTO.getUserId()).build())
                 .createdAt(cartResultDTO.getCreatedAt())
                 .checkedOut(cartResultDTO.isCheckedOut())
-                .totalPrice(cartResultDTO.getTotalPrice())
                 .build();
     }
 }
