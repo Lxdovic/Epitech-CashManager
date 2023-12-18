@@ -5,6 +5,6 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 
 @Composable
-fun CartComponent(navController: NavHostController) {
+fun CartComponent() {
     Text("Cart")
 }

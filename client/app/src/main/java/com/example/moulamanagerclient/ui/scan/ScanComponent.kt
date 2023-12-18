@@ -32,7 +32,6 @@ import com.google.accompanist.permissions.shouldShowRationale
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun ScanComponent(
-    navController: NavHostController,
     scanViewModel: ScanViewModel = viewModel()
 ) {
     Text("Scan")
