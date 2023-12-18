@@ -1,6 +1,5 @@
 package com.example.moulamanagerclient.ui.navbar
 
-import CheckoutComponent
 import ScanComponent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -11,37 +10,24 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.moulamanagerclient.shared.AppRoutes
 import com.example.moulamanagerclient.ui.cart.CartComponent
-import com.example.moulamanagerclient.ui.home.NavbarComponent
-
+import com.example.moulamanagerclient.ui.product.ProductComponent
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NavigationHost(navigationController: NavHostController) {
     Scaffold(
-    bottomBar = {
-        NavbarComponent(navigationController)
-    }
-) {
-    Column(Modifier.padding(it)) {
-        NavHost(navController = navigationController, startDestination = "cart") {
-//            composable("logout") {
-//                LoginActivity(navigationController)
-//            }
+        bottomBar = { NavbarComponent(navigationController) }
+    ) { paddingValues ->
+        Column(Modifier.padding(paddingValues)) {
+            NavHost(navController = navigationController, startDestination = AppRoutes.cart.path) {
+                composable(AppRoutes.cart.path) { CartComponent() }
+                composable(AppRoutes.scan.path) { ScanComponent() }
+                composable(AppRoutes.checkout.path) { ProductComponent() }
+                composable(AppRoutes.logout.path) { ProductComponent() }
 
-            composable("cart") {
-                CartComponent(navigationController)
-            }
-
-            composable("scan") {
-                ScanComponent(navigationController)
-            }
-
-            composable("checkout") {
-                CheckoutComponent(navigationController)
             }
         }
     }
-}
-
 }

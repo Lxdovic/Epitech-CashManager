@@ -1,8 +1,7 @@
-package com.example.moulamanagerclient.ui.home
+package com.example.moulamanagerclient.ui.navbar
 
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 
@@ -13,13 +12,11 @@ fun NavbarComponent(
     navViewModel: NavbarViewModel = viewModel()
 ) {
     NavigationBar {
-        var selectedItemIndex by rememberSaveable { mutableIntStateOf(0) }
-
         navViewModel.items.forEachIndexed() { index, item ->
             NavigationBarItem(
-                selected = selectedItemIndex == index,
+                selected = navViewModel.selectedItemIndex.intValue == index,
                 onClick = {
-                    selectedItemIndex = index
+                    navViewModel.selectedItemIndex.intValue = index
                     navController.navigate(item.route)
                 },
                 label = {
@@ -42,7 +39,7 @@ fun NavbarComponent(
                         }
                     ) {
                         Icon(
-                            imageVector = if (selectedItemIndex == index) item.selectedIcon else item.unselectedIcon,
+                            imageVector = if (navViewModel.selectedItemIndex.intValue == index) item.selectedIcon else item.unselectedIcon,
                             contentDescription = item.title,
                         )
                     }

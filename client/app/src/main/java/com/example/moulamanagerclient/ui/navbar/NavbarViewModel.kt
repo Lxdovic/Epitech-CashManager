@@ -1,43 +1,44 @@
-package com.example.moulamanagerclient.ui.home
+package com.example.moulamanagerclient.ui.navbar
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.*
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.lifecycle.ViewModel
 import com.example.moulamanagerclient.data.model.nav.NavbarItem
+import com.example.moulamanagerclient.shared.AppRoutes
 
 class NavbarViewModel: ViewModel() {
     val items = listOf(
         NavbarItem(
-            title = "Cart",
-            route = "cart",
+            title = AppRoutes.cart.title,
+            route = AppRoutes.cart.path,
             selectedIcon = Icons.Filled.ShoppingCart,
-            unselectedIcon = Icons.Outlined.ShoppingCart,
-            hasNews = false,
+            unselectedIcon = Icons.Outlined.ShoppingCart
         ),
 
         NavbarItem(
-            title = "Scan",
-            route = "scan",
+            title = AppRoutes.scan.title,
+            route = AppRoutes.scan.path,
             selectedIcon = Icons.Filled.Scanner,
-            unselectedIcon = Icons.Outlined.Scanner,
-            hasNews = false,
+            unselectedIcon = Icons.Outlined.Scanner
         ),
 
         NavbarItem(
-            title = "Checkout",
-            route = "checkout",
+            title = AppRoutes.checkout.title,
+            route = AppRoutes.checkout.path,
             selectedIcon = Icons.Filled.CreditCard,
-            unselectedIcon = Icons.Outlined.CreditCard,
-            hasNews = false,
+            unselectedIcon = Icons.Outlined.CreditCard
         ),
 
         NavbarItem(
-            title = "Logout",
-            route = "logout",
+            title = AppRoutes.logout.title,
+            route = AppRoutes.logout.path,
             selectedIcon = Icons.Filled.Logout,
-            unselectedIcon = Icons.Outlined.Logout,
-            hasNews = false,
+            unselectedIcon = Icons.Outlined.Logout
         ),
+
     )
+
+    val selectedItemIndex = mutableIntStateOf(0)
 }
