@@ -12,6 +12,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.moulamanagerclient.shared.AppRoutes
 import com.example.moulamanagerclient.ui.cart.CartComponent
+import com.example.moulamanagerclient.ui.cartItem.CartItemActivity
+import com.example.moulamanagerclient.ui.login.LoginActivity
 import com.example.moulamanagerclient.ui.product.ProductComponent
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -22,8 +24,8 @@ fun NavigationHost(navigationController: NavHostController) {
     ) { paddingValues ->
         Column(Modifier.padding(paddingValues)) {
             NavHost(navController = navigationController, startDestination = AppRoutes.cart.path) {
-                composable(AppRoutes.cart.path) { CartComponent() }
-                composable(AppRoutes.scan.path) { ScanComponent() }
+                composable(AppRoutes.cart.path) { LoginActivity() }
+                composable(AppRoutes.scan.path) { CartItemActivity() }
                 composable(AppRoutes.checkout.path) { ProductComponent() }
                 composable(AppRoutes.logout.path) { ProductComponent() }
 
