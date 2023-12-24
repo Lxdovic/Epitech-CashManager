@@ -33,7 +33,7 @@ class MainActivity : ComponentActivity() {
 			MoulamanagerclientTheme {
 				// A surface container using the 'background' color from the theme
 				Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-					if (authInterceptor.isLoggedIn(this)) {
+					if (authInterceptor.isLoggedIn()) {
 						NavigationHost(navigationController = rememberNavController())
 					} else {
 						LoginActivity()

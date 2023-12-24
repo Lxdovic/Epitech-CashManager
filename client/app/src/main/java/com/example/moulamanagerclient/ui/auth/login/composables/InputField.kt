@@ -11,9 +11,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import com.example.moulamanagerclient.R
-import com.example.moulamanagerclient.ui.theme.Colors
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun InputField(
 	label: String,
@@ -24,10 +22,11 @@ fun InputField(
 	val (showPassword, setShowPassword) = remember { mutableStateOf(false) }
 
 	OutlinedTextField(
-		colors = TextFieldDefaults.outlinedTextFieldColors(
-			textColor = Colors.BLACK_4,
+		colors = OutlinedTextFieldDefaults.colors(
 			focusedBorderColor = colorResource(id = R.color.black_4),
 			unfocusedBorderColor = colorResource(id = R.color.black_4),
+			focusedTextColor = colorResource(id = R.color.white),
+			unfocusedTextColor = colorResource(id = R.color.white),
 		),
 		value = value,
 		onValueChange = onValueChange,

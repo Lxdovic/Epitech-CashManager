@@ -42,7 +42,7 @@ fun LoginActivity() {
 	Scaffold(
 		topBar = {
 			TopAppBar(
-				colors = TopAppBarDefaults.smallTopAppBarColors(
+				colors = TopAppBarDefaults.topAppBarColors(
 					containerColor = Colors.BLACK_0,
 					titleContentColor = Colors.WHITE,
 				),

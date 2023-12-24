@@ -29,7 +29,7 @@ constructor(
 		return chain.proceed(requestBuilder.build())
 	}
 
-	fun isLoggedIn(context: Context): Boolean {
+	fun isLoggedIn(): Boolean {
 		val token = preferenceManager.getValue("token")
 		return token != null && isTokenValid(token)
 	}
