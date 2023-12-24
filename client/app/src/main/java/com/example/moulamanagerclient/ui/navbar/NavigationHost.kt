@@ -14,7 +14,6 @@ import com.example.moulamanagerclient.ui.auth.login.LoginActivity
 import com.example.moulamanagerclient.ui.product.ProductComponent
 import com.example.moulamanagerclient.ui.scan.ScanComponent
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NavigationHost(navigationController: NavHostController) {
 	Scaffold(

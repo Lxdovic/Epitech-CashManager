@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
@@ -31,9 +31,9 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun ScanComponent(
-	scanViewModel: ScanViewModel = viewModel()
-) {
+fun ScanComponent() {
+	val scanViewModel = hiltViewModel<ScanViewModel>()
+
 	Text("Scan")
 
 	val cameraPermissionState = rememberPermissionState(android.Manifest.permission.CAMERA)
@@ -112,8 +112,8 @@ fun Scan(scanViewModel: ScanViewModel) {
 		) {
 			Text(
 				modifier = Modifier
-                    .padding(start = 16.dp, end = 16.dp, top = 32.dp, bottom = 32.dp)
-                    .align(Alignment.CenterHorizontally),
+					.padding(start = 16.dp, end = 16.dp, top = 32.dp, bottom = 32.dp)
+					.align(Alignment.CenterHorizontally),
 				text = "Add to cart",
 				fontSize = 30.sp
 			)
@@ -213,9 +213,9 @@ fun Scan(scanViewModel: ScanViewModel) {
 
 			Row(
 				modifier = Modifier
-                    .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 48.dp)
-                    .fillMaxWidth()
-                    .fillMaxHeight(),
+					.padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 48.dp)
+					.fillMaxWidth()
+					.fillMaxHeight(),
 				horizontalArrangement = Arrangement.End,
 				verticalAlignment = Alignment.Bottom
 			) {

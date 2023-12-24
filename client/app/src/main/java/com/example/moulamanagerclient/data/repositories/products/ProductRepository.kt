@@ -5,11 +5,8 @@ import com.example.moulamanagerclient.data.network.ApiService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
-import javax.inject.Inject
 
-class ProductRepository
-@Inject
-constructor(
+class ProductRepository(
 	private val apiService: ApiService
 ) {
 	suspend fun getProductByBarcode(barcode: String): ProductResponse? {

@@ -1,6 +1,5 @@
 package com.example.moulamanagerclient.ui.auth.login
 
-import android.annotation.SuppressLint
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.moulamanagerclient.data.model.auth.LoginRequest
@@ -16,9 +15,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-/* Suppressing the linter is safe here because the context is a singleton
-that lives as long as the app lives so there is no risk of memory leaks here */
-@SuppressLint("StaticFieldLeak")
 @HiltViewModel
 class LoginViewModel
 @Inject

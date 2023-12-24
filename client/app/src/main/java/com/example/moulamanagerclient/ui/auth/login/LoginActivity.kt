@@ -12,12 +12,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.moulamanagerclient.MainActivity
 import com.example.moulamanagerclient.R
-import com.example.moulamanagerclient.data.network.ApiResult
 import com.example.moulamanagerclient.ui.theme.Colors
 
 @OptIn(ExperimentalMaterial3Api::class)

@@ -17,6 +17,7 @@ import javax.inject.Inject
 class ScanViewModel @Inject constructor(
 	private val productRepository: ProductRepository
 ) : ViewModel() {
+
 	private val _productResult: MutableStateFlow<ProductResponse?> = MutableStateFlow(null)
 	private val _ean: MutableStateFlow<String> = MutableStateFlow("")
 	private val _amount: MutableStateFlow<String> = MutableStateFlow("1")
