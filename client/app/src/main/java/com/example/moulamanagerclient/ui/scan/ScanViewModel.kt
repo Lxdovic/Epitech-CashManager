@@ -4,13 +4,12 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.moulamanagerclient.data.model.product.ProductResponse
+import com.example.moulamanagerclient.data.network.ApiResult
 import com.example.moulamanagerclient.data.repositories.products.ProductRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -45,11 +44,16 @@ class ScanViewModel @Inject constructor(
 	fun getProduct(barcode: String) {
 
 		viewModelScope.launch {
-			val response = productRepository.getProductByBarcode(barcode)
+			when (val response = productRepository.getProductByBarcode(barcode)) {
+				is ApiResult.Success -> {
+					_productResult.value = response.data
+				}
 
-			withContext(Dispatchers.Main) {
-				_productResult.value = response
-				Log.d("Product", response.toString())
+				is ApiResult.Error -> {
+					Log.e("ScanViewModel", "getProduct: ${response.errorInfo.message}")
+				}
+
+				ApiResult.Initial -> {}
 			}
 		}
 	}
