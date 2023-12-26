@@ -5,15 +5,18 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.moulamanagerclient.R
 import com.example.moulamanagerclient.data.model.product.ProductResponse
+import com.example.moulamanagerclient.ui.component.TitleSubtitleLayoutShimmer
 import com.example.moulamanagerclient.ui.theme.Colors
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun ProductComponent(name: String, barcode: String) {
@@ -48,16 +51,7 @@ fun ProductTopAppBar() {
 
 @Composable
 fun ProductLoadingBox() {
-	Box(
-		modifier = Modifier
-			.fillMaxSize()
-			.wrapContentSize(Alignment.Center)
-	) {
-		CircularProgressIndicator(
-			modifier = Modifier
-				.size(50.dp)
-		)
-	}
+	TitleSubtitleLayoutShimmer()
 }
 
 @Composable
@@ -72,7 +66,12 @@ fun ProductEmptyBox(message: String) {
 }
 
 @Composable
-fun ProductList(products: List<ProductResponse>, isNextPageLoading: Boolean, loadMoreProducts: () -> Unit) {
+fun ProductList(
+	products: List<ProductResponse>,
+	isNextPageLoading: Boolean,
+	hasMoreProducts: Boolean,
+	loadMoreProducts: () -> Unit
+) {
 	LazyColumn {
 		items(products) { product ->
 			ProductComponent(
@@ -80,29 +79,81 @@ fun ProductList(products: List<ProductResponse>, isNextPageLoading: Boolean, loa
 				barcode = product.barcode
 			)
 		}
-		if (isNextPageLoading) {
+		if (isNextPageLoading && hasMoreProducts) {
 			item { ProductLoadingComponent() }
 		}
-		item {
-			LaunchedEffect(Unit) {
-				loadMoreProducts()
+		if (products.isNotEmpty() && hasMoreProducts && !isNextPageLoading) {
+			item {
+				LaunchedEffect(Unit) {
+					loadMoreProducts()
+				}
 			}
 		}
 	}
 }
 
+/**
+ * Loading component for the list of products
+ */
 @Composable
 fun ProductLoadingComponent() {
+	Box(
+		modifier = Modifier
+			.fillMaxWidth()
+			.wrapContentSize(Alignment.Center)
+	) {
+		CircularProgressIndicator(
+			modifier = Modifier
+				.size(48.dp),
+			color = Colors.YELLOW_1
+
+		)
+	}
+}
+
+/**
+ * Search bar for products
+ *
+ * TODO: Create a custom design for the search bar
+ * @param query The query to search for
+ * @param onSearch The callback to execute when the user types in the search bar
+ * @see ProductViewModel.searchProducts
+ */
+@Composable
+fun ProductSearchBar(
+	query: MutableState<String>,
+	onSearch: (String) -> Unit
+) {
+	val scope = rememberCoroutineScope()
+	var job by remember { mutableStateOf<Job?>(null) }
+
 	Row(
-		verticalAlignment = Alignment.CenterVertically,
-		horizontalArrangement = Arrangement.Center,
 		modifier = Modifier
 			.fillMaxWidth()
 			.wrapContentSize()
 	) {
-		CircularProgressIndicator(
-			modifier = Modifier
-				.size(50.dp)
+		TextField(
+			value = query.value,
+			onValueChange = { newValue ->
+				query.value = newValue
+				job?.cancel()
+				if (newValue.length >= 3) {
+					job = scope.launch {
+						// Debounce time after user stops typing
+						delay(300)
+						onSearch(newValue)
+					}
+				} else if (newValue.isEmpty()) {
+					job = scope.launch {
+						// Debounce time after user stops typing
+						delay(300)
+						onSearch("")
+					}
+				}
+			},
+			label = { Text("Search") },
+			singleLine = true,
+			modifier = Modifier.fillMaxWidth()
 		)
 	}
 }
