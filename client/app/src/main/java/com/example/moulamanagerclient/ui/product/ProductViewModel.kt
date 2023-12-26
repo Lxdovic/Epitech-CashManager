@@ -6,6 +6,7 @@ import com.example.moulamanagerclient.data.model.product.ProductResponse
 import com.example.moulamanagerclient.data.network.ApiResult
 import com.example.moulamanagerclient.data.repositories.products.ProductRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -18,7 +19,7 @@ constructor(
 	private val productRepository: ProductRepository
 ) : ViewModel() {
 
-	private val _isLoading: MutableStateFlow<Boolean> = MutableStateFlow(false)
+	private val _isLoading: MutableStateFlow<Boolean> = MutableStateFlow(true)
 	val isLoading: StateFlow<Boolean> = _isLoading
 
 	private val _isNextPageLoading: MutableStateFlow<Boolean> = MutableStateFlow(false)
@@ -68,6 +69,7 @@ constructor(
 	}
 
 	fun loadMoreProducts() = viewModelScope.launch {
+		_isNextPageLoading.value = true
 		getProducts()
 	}
 
