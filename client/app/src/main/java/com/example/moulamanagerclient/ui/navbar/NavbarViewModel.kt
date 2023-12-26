@@ -25,8 +25,8 @@ class NavbarViewModel: ViewModel() {
         ),
 
         NavbarItem(
-            title = AppRoutes.CHECKOUT.title,
-            route = AppRoutes.CHECKOUT.path,
+            title = AppRoutes.PRODUCT.title,
+            route = AppRoutes.PRODUCT.path,
             selectedIcon = Icons.Filled.CreditCard,
             unselectedIcon = Icons.Outlined.CreditCard
         ),
