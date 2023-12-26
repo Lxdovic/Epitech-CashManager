@@ -78,7 +78,7 @@ constructor(
 						}
 
 						else -> {
-							_errorMessage.value = "Login failed"
+							_errorMessage.value = result.errorInfo.message
 						}
 					}
 				}

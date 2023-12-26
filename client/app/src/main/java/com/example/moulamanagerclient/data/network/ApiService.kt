@@ -12,7 +12,10 @@ import retrofit2.http.*
 
 interface ApiService {
     @GET(ApiEndpoints.BARCODE)
-    suspend fun getProducts(@Path("barcode") barcode: String): Response<ProductResponse>
+    suspend fun getProductsByBarcode(@Path("barcode") barcode: String): Response<ProductResponse>
+
+    @GET(ApiEndpoints.PRODUCTS)
+    suspend fun getProducts(@Query("page") page: Int): Response<Pagination<ProductResponse>>
 
     @POST(ApiEndpoints.LOGIN)
     suspend fun login(@Body request: LoginRequest): Response<LoginResponse>
