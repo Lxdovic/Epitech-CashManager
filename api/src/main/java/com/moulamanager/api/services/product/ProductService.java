@@ -31,6 +31,11 @@ public class ProductService extends AbstractService<ProductModel> implements IPr
     }
 
     @Override
+    public Page<ProductModel> findByName(String name, Pageable pageable) {
+        return productRepository.findByNameContainingIgnoreCase(name, pageable);
+    }
+
+    @Override
     public ProductModel findByBarcode(String barcode) {
         return findProductByBarcode(barcode);
     }

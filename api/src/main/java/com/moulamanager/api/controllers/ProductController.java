@@ -1,5 +1,7 @@
 package com.moulamanager.api.controllers;
 
+import com.moulamanager.api.exceptions.product.InvalidNameLength;
+import com.moulamanager.api.exceptions.product.ProductNotFoundException;
 import com.moulamanager.api.models.ProductModel;
 import com.moulamanager.api.services.product.ProductService;
 import lombok.AllArgsConstructor;
@@ -26,6 +28,16 @@ public class ProductController extends AbstractController {
     @GetMapping("/{id}")
     public ResponseEntity<ProductModel> getProductById(@PathVariable long id) {
         return ResponseEntity.ok(productService.findById(id));
+    }
+
+    @GetMapping("/name/{name}")
+    public ResponseEntity<Page<ProductModel>> getProductByName(@PathVariable String name, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+        if (name.length() < 3) {
+            String NAME_LENGTH_ERROR = "Name length must be at least 3 characters";
+            throw new InvalidNameLength(NAME_LENGTH_ERROR);
+        }
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(productService.findByName(name, pageable));
     }
 
     @GetMapping("/barcode/{barcode}")

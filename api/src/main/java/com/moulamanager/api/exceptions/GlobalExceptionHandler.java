@@ -6,6 +6,7 @@ import com.moulamanager.api.exceptions.cart.CartNotFoundException;
 import com.moulamanager.api.exceptions.cartItem.CartItemAlreadyExistsException;
 import com.moulamanager.api.exceptions.cartItem.CartItemNotFoundException;
 import com.moulamanager.api.exceptions.cartItem.InvalidQuantityException;
+import com.moulamanager.api.exceptions.product.InvalidNameLength;
 import com.moulamanager.api.exceptions.product.ProductAlreadyExistsException;
 import com.moulamanager.api.exceptions.product.ProductNotFoundException;
 import com.moulamanager.api.exceptions.stripe.CustomerNotFoundException;
@@ -80,6 +81,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = InvalidQuantityException.class)
     public ResponseEntity<Object> handleInvalidQuantityException(InvalidQuantityException exception) {
         logger.error("Invalid quantity exception: {}", exception.getMessage());
+        return buildResponseException(exception.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = InvalidNameLength.class)
+    public ResponseEntity<Object> handleInvalidNameLength(InvalidNameLength exception) {
+        logger.error("Invalid name length exception: {}", exception.getMessage());
         return buildResponseException(exception.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
