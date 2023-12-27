@@ -17,4 +17,9 @@ class PreferenceManager(context: Context) {
     fun getValue(key: String): String? {
         return sharedPreferences.getString(key, null)
     }
+    fun removeValue(key: String) {
+        val editor = sharedPreferences.edit()
+        editor.remove(key)
+        editor.apply()
+    }
 }

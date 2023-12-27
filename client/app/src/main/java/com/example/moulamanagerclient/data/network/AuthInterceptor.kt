@@ -1,6 +1,5 @@
 package com.example.moulamanagerclient.data.network
 
-import android.content.Context
 import com.auth0.android.jwt.JWT
 import com.example.moulamanagerclient.utils.PreferenceManager
 import okhttp3.Interceptor
@@ -34,6 +33,9 @@ constructor(
 		return token != null && isTokenValid(token)
 	}
 
+	fun logout() {
+		preferenceManager.removeValue("token")
+	}
 
 	private fun isTokenValid(token: String): Boolean {
 		val decodedJWT = JWT(token)

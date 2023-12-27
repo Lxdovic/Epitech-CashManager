@@ -4,6 +4,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.moulamanagerclient.shared.AppRoutes
 
 @Composable
 fun NavbarComponent(
@@ -16,7 +17,11 @@ fun NavbarComponent(
 				selected = navViewModel.selectedItemIndex.intValue == index,
 				onClick = {
 					navViewModel.selectedItemIndex.intValue = index
-					navController.navigate(item.route)
+					if (item.route == AppRoutes.LOGOUT.path) {
+						navViewModel.onLogoutClick(navController)
+					} else {
+						navController.navigate(item.route)
+					}
 				},
 				label = {
 					Text(text = item.title)

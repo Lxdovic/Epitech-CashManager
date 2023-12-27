@@ -11,10 +11,19 @@ import androidx.compose.material.icons.outlined.Scanner
 import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.lifecycle.ViewModel
+import androidx.navigation.NavController
 import com.example.moulamanagerclient.data.model.nav.NavbarItem
+import com.example.moulamanagerclient.data.network.AuthInterceptor
 import com.example.moulamanagerclient.shared.AppRoutes
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class NavbarViewModel : ViewModel() {
+@HiltViewModel
+class NavbarViewModel
+@Inject
+constructor(
+	private val authInterceptor: AuthInterceptor
+) : ViewModel() {
 	val selectedItemIndex = mutableIntStateOf(0)
 
 	val items = listOf(
@@ -40,11 +49,20 @@ class NavbarViewModel : ViewModel() {
 		),
 
 		NavbarItem(
-			title = AppRoutes.TEST.title,
-			route = AppRoutes.TEST.path,
+			title = AppRoutes.LOGOUT.title,
+			route = AppRoutes.LOGOUT.path,
 			selectedIcon = Icons.Filled.Logout,
 			unselectedIcon = Icons.Outlined.Logout
 		),
 
 		)
+
+	fun onLogoutClick(navController: NavController) {
+		authInterceptor.logout()
+		navController.navigate(AppRoutes.LOGIN.path) {
+			popUpTo(navController.graph.startDestinationId) {
+				inclusive = true
+			}
+		}
+	}
 }
