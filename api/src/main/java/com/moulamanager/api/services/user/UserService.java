@@ -1,11 +1,11 @@
 package com.moulamanager.api.services.user;
 
+import com.moulamanager.api.dto.user.request.CreateUserRequestDTO;
 import com.moulamanager.api.dto.user.request.LoginRequestDTO;
 import com.moulamanager.api.dto.user.result.LoginResultDTO;
 import com.moulamanager.api.exceptions.user.UserAlreadyExistsException;
 import com.moulamanager.api.exceptions.user.UserNotFoundException;
 import com.moulamanager.api.models.UserModel;
-import com.moulamanager.api.dto.user.request.CreateUserRequestDTO;
 import com.moulamanager.api.repositories.UserRepository;
 import com.moulamanager.api.services.AbstractService;
 import com.moulamanager.api.services.jwt.JwtUtils;
@@ -29,6 +29,7 @@ public class UserService extends AbstractService<UserModel> implements IUserServ
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
     private static final String USER_WITH_EMAIL_EXISTS = "User with email %s already exists";
+    private static final String USER_WITH_USERNAME_EXISTS = "User with username %s already exists";
     private static final String USER_NOT_FOUND = "User not found";
 
     @Override
@@ -43,7 +44,7 @@ public class UserService extends AbstractService<UserModel> implements IUserServ
 
     @Override
     public LoginResultDTO registerUser(CreateUserRequestDTO signUpRequest) {
-        checkIfUserWithSameEmailExists(signUpRequest.getEmail());
+        checkIfUserWithSameEmailOrUsernameExists(signUpRequest.getEmail(), signUpRequest.getUsername());
 
         createNewUser(signUpRequest);
 
@@ -85,9 +86,12 @@ public class UserService extends AbstractService<UserModel> implements IUserServ
         return new LoginResultDTO(jwt, userDetails);
     }
 
-    private void checkIfUserWithSameEmailExists(String email) {
+    private void checkIfUserWithSameEmailOrUsernameExists(String email, String username) {
         if (userRepository.existsByEmail(email)) {
             throw new UserAlreadyExistsException(String.format(USER_WITH_EMAIL_EXISTS, email));
+        }
+        if (userRepository.existsByUsername(username)) {
+            throw new UserAlreadyExistsException(String.format(USER_WITH_USERNAME_EXISTS, username));
         }
     }
 
