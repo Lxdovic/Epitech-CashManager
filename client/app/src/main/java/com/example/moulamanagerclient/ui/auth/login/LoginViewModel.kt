@@ -11,6 +11,7 @@ import com.example.moulamanagerclient.utils.PreferenceManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -27,14 +28,13 @@ constructor(
 	private val _inputUsername: MutableStateFlow<String> = MutableStateFlow("")
 	private val _errorMessage: MutableStateFlow<String> = MutableStateFlow("")
 	private val _isLoading: MutableStateFlow<Boolean> = MutableStateFlow(false)
+	private val _navigateToCart: MutableSharedFlow<Unit> = MutableSharedFlow()
 
 	val inputPassword: StateFlow<String> = _inputPassword
 	val inputUsername: StateFlow<String> = _inputUsername
 	val errorMessage: StateFlow<String> = _errorMessage
 	val isLoading: StateFlow<Boolean> = _isLoading
-
-
-	val navigateToMain: MutableSharedFlow<Unit> = MutableSharedFlow()
+	val navigateToCart: SharedFlow<Unit> = _navigateToCart
 
 
 	fun setUsername(username: String) {
@@ -66,8 +66,7 @@ constructor(
 				is ApiResult.Success -> {
 					result.data?.token?.let { token ->
 						preferenceManager.setValue("token", token)
-						navigateToMain.emit(Unit)
-
+						_navigateToCart.emit(Unit)
 					}
 				}
 

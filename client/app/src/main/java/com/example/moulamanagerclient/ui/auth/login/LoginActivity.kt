@@ -1,6 +1,5 @@
 package com.example.moulamanagerclient.ui.auth.login
 
-import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -10,29 +9,30 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.moulamanagerclient.MainActivity
+import androidx.navigation.NavController
 import com.example.moulamanagerclient.R
+import com.example.moulamanagerclient.shared.AppRoutes
 import com.example.moulamanagerclient.ui.theme.Colors
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginActivity() {
+fun LoginActivity(navController: NavController) {
 	val viewModel = hiltViewModel<LoginViewModel>()
 	val inputPassword by viewModel.inputPassword.collectAsState()
 	val inputUsername by viewModel.inputUsername.collectAsState()
 	val errorMessage by viewModel.errorMessage.collectAsState()
 	val isLoading by viewModel.isLoading.collectAsState()
 
-	val context = LocalContext.current
-
-	LaunchedEffect(viewModel.navigateToMain) {
-		viewModel.navigateToMain.collect {
-			val intent = Intent(context, MainActivity::class.java)
-			intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-			context.startActivity(intent)
+	LaunchedEffect(viewModel.navigateToCart) {
+		viewModel.navigateToCart.collect {
+			navController.navigate(AppRoutes.CART.path) {
+				popUpTo(navController.graph.startDestinationId) {
+					inclusive = true
+				}
+				launchSingleTop = true
+			}
 		}
 	}
 

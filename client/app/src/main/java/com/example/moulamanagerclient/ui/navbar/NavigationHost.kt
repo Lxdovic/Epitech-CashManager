@@ -8,23 +8,40 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.moulamanagerclient.data.network.AuthInterceptor
 import com.example.moulamanagerclient.shared.AppRoutes
 import com.example.moulamanagerclient.ui.auth.login.LoginActivity
+import com.example.moulamanagerclient.ui.auth.register.RegisterActivity
 import com.example.moulamanagerclient.ui.product.ProductActivity
-import com.example.moulamanagerclient.ui.product.ProductComponent
 import com.example.moulamanagerclient.ui.scan.ScanComponent
 
 @Composable
-fun NavigationHost(navigationController: NavHostController) {
+fun NavigationHost(navigationController: NavHostController, authInterceptor: AuthInterceptor) {
+	val startDestination = if (authInterceptor.isLoggedIn()) AppRoutes.CART.path else AppRoutes.LOGIN.path
+
 	Scaffold(
-		bottomBar = { NavbarComponent(navigationController) }
+		bottomBar = {
+			val currentRoute = navigationController.currentBackStackEntryAsState().value?.destination?.route
+			if (currentRoute in listOf(
+					AppRoutes.CART.path,
+					AppRoutes.SCAN.path,
+					AppRoutes.PRODUCT.path,
+					AppRoutes.LOGOUT.path
+				)
+			) {
+				NavbarComponent(navigationController)
+			}
+		}
 	) { paddingValues ->
 		Column(Modifier.padding(paddingValues)) {
 			NavHost(
 				navController = navigationController,
-				startDestination = AppRoutes.CART.path
+				startDestination = startDestination
 			) {
-				composable(AppRoutes.CART.path) { LoginActivity() }
+				composable(AppRoutes.LOGIN.path) { LoginActivity(navigationController) }
+				composable(AppRoutes.REGISTER.path) { RegisterActivity(navigationController) }
+				composable(AppRoutes.CART.path) { ProductActivity() }
 				composable(AppRoutes.SCAN.path) { ScanComponent() }
 				composable(AppRoutes.PRODUCT.path) { ProductActivity() }
 				composable(AppRoutes.LOGOUT.path) { ProductActivity() }
