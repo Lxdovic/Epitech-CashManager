@@ -6,7 +6,6 @@ import com.example.moulamanagerclient.data.model.auth.LoginRequest
 import com.example.moulamanagerclient.data.model.auth.LoginResponse
 import com.example.moulamanagerclient.data.network.ApiResult
 import com.example.moulamanagerclient.data.repositories.auth.AuthRepository
-import com.example.moulamanagerclient.shared.ErrorStatus
 import com.example.moulamanagerclient.utils.PreferenceManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -29,12 +28,14 @@ constructor(
 	private val _errorMessage: MutableStateFlow<String> = MutableStateFlow("")
 	private val _isLoading: MutableStateFlow<Boolean> = MutableStateFlow(false)
 	private val _navigateToCart: MutableSharedFlow<Unit> = MutableSharedFlow()
+	private val _navigateToRegister: MutableSharedFlow<Unit> = MutableSharedFlow()
 
 	val inputPassword: StateFlow<String> = _inputPassword
 	val inputUsername: StateFlow<String> = _inputUsername
 	val errorMessage: StateFlow<String> = _errorMessage
 	val isLoading: StateFlow<Boolean> = _isLoading
 	val navigateToCart: SharedFlow<Unit> = _navigateToCart
+	val navigateToRegister: SharedFlow<Unit> = _navigateToRegister
 
 
 	fun setUsername(username: String) {
@@ -71,15 +72,7 @@ constructor(
 				}
 
 				is ApiResult.Error -> {
-					when (result.errorInfo.status) {
-						ErrorStatus.STATUS_UNAUTHORIZED -> {
-							_errorMessage.value = "Invalid credentials"
-						}
-
-						else -> {
-							_errorMessage.value = result.errorInfo.message
-						}
-					}
+					_errorMessage.value = result.errorInfo.message
 				}
 
 				ApiResult.Initial -> {
@@ -88,6 +81,12 @@ constructor(
 			}
 
 			_isLoading.value = false
+		}
+	}
+
+	fun navigateToRegister() {
+		viewModelScope.launch {
+			_navigateToRegister.emit(Unit)
 		}
 	}
 }

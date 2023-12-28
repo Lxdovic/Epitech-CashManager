@@ -1,4 +1,4 @@
-package com.example.moulamanagerclient.ui.auth.login
+package com.example.moulamanagerclient.ui.auth.register
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -11,20 +11,29 @@ import androidx.compose.ui.unit.dp
 import com.example.moulamanagerclient.ui.auth.composables.*
 
 @Composable
-fun LoginComponent(
+fun RegisterComponent(
 	title: String,
+	inputEmail: String,
+	onEmailChange: (String) -> Unit,
 	inputUsername: String,
 	onUsernameChange: (String) -> Unit,
 	inputPassword: String,
 	onPasswordChange: (String) -> Unit,
-	onLoginClick: () -> Unit,
+	inputConfirmPassword: String,
+	onConfirmPasswordChange: (String) -> Unit,
 	onRegisterClick: () -> Unit,
+	onLoginClick: () -> Unit,
 	errorMessage: String,
 	isLoading: Boolean,
 ) {
 	AuthContainer {
-		AuthTitle(title)
+		AuthTitle(title = title)
 		Spacer(modifier = Modifier.height(10.dp))
+		InputField(
+			label = "Email",
+			value = inputEmail,
+			onValueChange = onEmailChange
+		)
 		InputField(
 			label = "Username",
 			value = inputUsername,
@@ -36,6 +45,12 @@ fun LoginComponent(
 			onValueChange = onPasswordChange,
 			isPassword = true
 		)
+		InputField(
+			label = "Confirm password",
+			value = inputConfirmPassword,
+			onValueChange = onConfirmPasswordChange,
+			isPassword = true
+		)
 		if (errorMessage.isNotEmpty()) {
 			Text(
 				text = errorMessage,
@@ -44,16 +59,16 @@ fun LoginComponent(
 			)
 		}
 		AuthButton(
-			onClick = onLoginClick,
-			label = "Sign in",
+			onClick = onRegisterClick,
+			label = "Sign Up",
 			isLoading = isLoading,
 		)
 
 		DividerWithText(text = "OR")
 
 		AuthButton(
-			onClick = onRegisterClick,
-			label = "Sign up",
+			onClick = onLoginClick,
+			label = "Sign in",
 			isLoading = false,
 			borderColor = Color.Gray
 		)

@@ -60,7 +60,7 @@ constructor(
 	fun onLogoutClick(navController: NavController) {
 		authInterceptor.logout()
 		navController.navigate(AppRoutes.LOGIN.path) {
-			popUpTo(navController.graph.startDestinationId) {
+			popUpTo(navController.graph.id) {
 				inclusive = true
 			}
 		}

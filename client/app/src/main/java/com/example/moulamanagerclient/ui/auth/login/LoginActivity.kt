@@ -1,22 +1,17 @@
 package com.example.moulamanagerclient.ui.auth.login
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.moulamanagerclient.R
 import com.example.moulamanagerclient.shared.AppRoutes
-import com.example.moulamanagerclient.ui.theme.Colors
+import com.example.moulamanagerclient.ui.auth.composables.AuthContainerBorder
+import com.example.moulamanagerclient.ui.auth.composables.AuthTopBar
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginActivity(navController: NavController) {
 	val viewModel = hiltViewModel<LoginViewModel>()
@@ -28,7 +23,18 @@ fun LoginActivity(navController: NavController) {
 	LaunchedEffect(viewModel.navigateToCart) {
 		viewModel.navigateToCart.collect {
 			navController.navigate(AppRoutes.CART.path) {
-				popUpTo(navController.graph.startDestinationId) {
+				popUpTo(navController.graph.id) {
+					inclusive = true
+				}
+				launchSingleTop = true
+			}
+		}
+	}
+
+	LaunchedEffect(viewModel.navigateToRegister) {
+		viewModel.navigateToRegister.collect {
+			navController.navigate(AppRoutes.REGISTER.path) {
+				popUpTo(navController.graph.id) {
 					inclusive = true
 				}
 				launchSingleTop = true
@@ -38,50 +44,25 @@ fun LoginActivity(navController: NavController) {
 
 	Scaffold(
 		topBar = {
-			TopAppBar(
-				colors = TopAppBarDefaults.topAppBarColors(
-					containerColor = Colors.BLACK_0,
-					titleContentColor = Colors.WHITE,
-				),
-				title = {
-					Row(
-						verticalAlignment = Alignment.CenterVertically,
-						horizontalArrangement = Arrangement.Center,
-						modifier = Modifier
-							.fillMaxWidth()
-							.wrapContentSize()
-					) {
-						Image(
-							painter = painterResource(id = R.drawable.logo_full_white),
-							contentDescription = "Logo",
-						)
-					}
-				}
-			)
+			AuthTopBar(logo = R.drawable.logo_full_white)
 		}
 	) { paddingValues ->
-		Surface(
-			modifier = Modifier
-				.fillMaxSize()
-				.padding(paddingValues),
-			color = Colors.BLACK_1
-		) {
-			Row(
-				verticalAlignment = Alignment.CenterVertically,
-				horizontalArrangement = Arrangement.Center,
-				modifier = Modifier
-					.wrapContentSize()
-			) {
+		AuthContainerBorder(
+			paddingValues = paddingValues,
+			content = {
 				LoginComponent(
+					title = "Sign in",
 					inputUsername = inputUsername,
 					onUsernameChange = { viewModel.setUsername(it) },
 					inputPassword = inputPassword,
 					onPasswordChange = { viewModel.setPassword(it) },
 					onLoginClick = { viewModel.performLogin() },
+					onRegisterClick = { viewModel.navigateToRegister() },
 					errorMessage = errorMessage,
 					isLoading = isLoading,
 				)
 			}
-		}
+
+		)
 	}
 }

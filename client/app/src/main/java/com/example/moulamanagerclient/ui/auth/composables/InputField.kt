@@ -1,5 +1,7 @@
-package com.example.moulamanagerclient.ui.auth.login.composables
+package com.example.moulamanagerclient.ui.auth.composables
 
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
@@ -7,9 +9,11 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.unit.dp
 import com.example.moulamanagerclient.R
 
 @Composable
@@ -28,6 +32,9 @@ fun InputField(
 			focusedTextColor = colorResource(id = R.color.white),
 			unfocusedTextColor = colorResource(id = R.color.white),
 		),
+		modifier = Modifier
+			.fillMaxWidth()
+			.padding(bottom = 10.dp),
 		value = value,
 		onValueChange = onValueChange,
 		label = { Text(text = label) },
