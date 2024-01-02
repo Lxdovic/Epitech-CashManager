@@ -4,10 +4,11 @@ import com.moulamanager.api.dto.stripe.result.PaymentIntentResultDTO;
 import com.moulamanager.api.services.jwt.JwtUtils;
 import com.moulamanager.api.services.stripe.StripeService;
 import com.stripe.exception.StripeException;
-import com.stripe.model.PaymentIntent;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
@@ -28,8 +29,9 @@ public class StripeController {
     public ResponseEntity<PaymentIntentResultDTO> createPaymentIntent(@RequestHeader("Authorization") String userToken) {
         try {
             long userId = jwtUtils.getUserIdFromJwtToken(userToken);
-            PaymentIntent paymentIntent = stripeService.createPaymentIntent(userId, "eur");
-            return ResponseEntity.ok(PaymentIntentResultDTO.fromPaymentIntent(paymentIntent));
+            //TODO: Let the client pass the currency as a parameter
+            PaymentIntentResultDTO paymentIntent = stripeService.createPaymentIntent(userId, "eur");
+            return ResponseEntity.ok(paymentIntent);
         } catch (StripeException e) {
             System.err.printf(String.format(STRIPE_EXCEPTION, e.getMessage()));
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

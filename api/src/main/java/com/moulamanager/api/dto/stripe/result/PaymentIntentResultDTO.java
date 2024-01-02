@@ -8,10 +8,18 @@ import lombok.Data;
 @Data
 public class PaymentIntentResultDTO {
     private String paymentIntentId;
+    private String clientSecret;
+    private String ephemeralKey;
+    private String clientId;
+    private String publishableKey;
 
-    public static PaymentIntentResultDTO fromPaymentIntent(PaymentIntent paymentIntent) {
+    public static PaymentIntentResultDTO fromPaymentIntent(PaymentIntent paymentIntent, String ephemeralKey, String publishableKey) {
         return PaymentIntentResultDTO.builder()
                 .paymentIntentId(paymentIntent.getId())
+                .clientSecret(paymentIntent.getClientSecret())
+                .ephemeralKey(ephemeralKey)
+                .clientId(paymentIntent.getCustomer())
+                .publishableKey(publishableKey)
                 .build();
     }
 }
