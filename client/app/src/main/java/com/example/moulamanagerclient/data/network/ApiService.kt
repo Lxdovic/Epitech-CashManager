@@ -4,7 +4,9 @@ import com.example.moulamanagerclient.data.model.Pagination
 import com.example.moulamanagerclient.data.model.auth.LoginRequest
 import com.example.moulamanagerclient.data.model.auth.LoginResponse
 import com.example.moulamanagerclient.data.model.auth.RegisterRequest
+import com.example.moulamanagerclient.data.model.payment.PaymentIntentResponse
 import com.example.moulamanagerclient.data.model.product.ProductResponse
+import com.stripe.android.model.PaymentIntent
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -27,4 +29,7 @@ interface ApiService {
 
 	@POST(ApiEndpoints.REGISTER)
 	suspend fun register(@Body request: RegisterRequest): Response<LoginResponse>
+
+	@POST(ApiEndpoints.CREATE_PAYMENT_INTENT)
+	suspend fun createPaymentIntent(): Response<PaymentIntentResponse>
 }
