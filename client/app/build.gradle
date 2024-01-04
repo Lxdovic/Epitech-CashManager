@@ -51,40 +51,41 @@ android {
 
 }
 
-
 dependencies {
-    implementation 'androidx.compose.material3:material3:1.2.0-alpha12'
     implementation "androidx.camera:camera-camera2:1.3.1"
     implementation "androidx.camera:camera-lifecycle:1.3.1"
     implementation "androidx.camera:camera-view:1.3.1"
     implementation "com.google.mlkit:barcode-scanning:17.2.0"
     implementation "com.google.accompanist:accompanist-permissions:0.32.0"
-    implementation "androidx.compose.material:material-icons-extended-android:1.5.4"
-    implementation 'androidx.core:core-ktx:1.12.0'
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.2'
-    implementation 'androidx.activity:activity-compose:1.8.2'
-    implementation 'androidx.preference:preference-ktx:1.2.1'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2'
+    implementation "androidx.core:core-ktx:${version_androidx_core}"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:${version_androidx_lifecycle}"
+    implementation "androidx.activity:activity-compose:${version_androidx_activity}"
+    implementation "androidx.preference:preference-ktx:${version_androidx_preference}"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:${version_androidx_lifecycle}"
     implementation platform('androidx.compose:compose-bom:2023.03.00')
-    implementation 'androidx.compose.ui:ui'
-    implementation 'androidx.compose.ui:ui-graphics'
-    implementation 'androidx.compose.ui:ui-tooling-preview'
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:${version_androidx_lifecycle}"
+    testImplementation "junit:junit:4.13.2"
+    androidTestImplementation "androidx.test.ext:junit:1.1.5"
+    androidTestImplementation "androidx.test.espresso:espresso-core:3.5.1"
     androidTestImplementation platform('androidx.compose:compose-bom:2023.03.00')
-    androidTestImplementation 'androidx.compose.ui:ui-test-junit4'
-    debugImplementation 'androidx.compose.ui:ui-tooling'
-    debugImplementation 'androidx.compose.ui:ui-test-manifest'
+    androidTestImplementation "androidx.compose.ui:ui-test-junit4"
+    debugImplementation "androidx.compose.ui:ui-tooling:1.5.4"
+    debugImplementation "androidx.compose.ui:ui-test-manifest:1.5.4"
+
+    // Compose
+    implementation "androidx.compose.material3:material3:1.1.2"
+    implementation "androidx.compose.ui:ui-tooling-preview:1.5.4"
+    implementation "androidx.compose.ui:ui:${version_androidx_compose}"
+    implementation "androidx.compose.ui:ui-graphics:${version_androidx_compose}"
+    implementation "androidx.compose.material:material-icons-extended-android:${version_androidx_compose}"
 
     // hilt
-    def hilt_version = "2.48"
-    implementation("com.google.dagger:hilt-android:$hilt_version")
-    kapt("com.google.dagger:hilt-android-compiler:$hilt_version")
+    implementation("com.google.dagger:hilt-android:2.48")
+    kapt("com.google.dagger:hilt-android-compiler:2.48")
 
     //retrofit
     implementation "com.squareup.retrofit2:converter-moshi:2.9.0"
-    implementation "com.squareup.moshi:moshi:1.14.0"
+    implementation "com.squareup.moshi:moshi:1.15.0"
     ksp "com.squareup.moshi:moshi-kotlin-codegen:1.14.0"
     implementation "com.squareup.okhttp3:logging-interceptor:4.10.0"
 
@@ -99,11 +100,15 @@ dependencies {
     implementation 'io.github.cdimascio:dotenv-kotlin:6.4.1'
 
     // ViewModel
-    implementation "androidx.compose.runtime:runtime:1.5.4"
-    implementation "androidx.compose.runtime:runtime-livedata:1.5.4"
-    implementation "androidx.compose.runtime:runtime-rxjava2:1.5.4"
+    implementation "androidx.compose.runtime:runtime:${version_androidx_compose}"
+    implementation "androidx.compose.runtime:runtime-livedata:${version_androidx_compose}"
+    implementation "androidx.compose.runtime:runtime-rxjava2:${version_androidx_compose}"
 
+    // JWT decode
     implementation 'com.auth0.android:jwtdecode:2.0.2'
+
+    // Stripe
+    implementation "com.stripe:stripe-android:20.36.0"
 }
 
 kapt {
