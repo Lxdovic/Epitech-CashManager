@@ -6,6 +6,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.moulamanagerclient.shared.AppRoutes
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NavbarComponent(
 	navController: NavController,

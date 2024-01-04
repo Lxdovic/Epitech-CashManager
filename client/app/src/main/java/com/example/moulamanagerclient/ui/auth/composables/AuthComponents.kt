@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.moulamanagerclient.R
 import com.example.moulamanagerclient.ui.theme.Colors
+import androidx.compose.material3.Text
 
 @Composable
 fun AuthTitle(title: String) {
@@ -50,14 +51,14 @@ fun DividerWithText(text: String) {
 		horizontalArrangement = Arrangement.Center,
 		verticalAlignment = Alignment.CenterVertically
 	) {
-		HorizontalDivider(
+		Divider(
 			color = Color.Gray,
 			modifier = Modifier
 				.weight(1f)
 				.padding(end = 8.dp)
 		)
 		Text(text = text, color = Color.Gray, style = MaterialTheme.typography.bodyMedium)
-		HorizontalDivider(
+		Divider(
 			color = Color.Gray,
 			modifier = Modifier
 				.weight(1f)

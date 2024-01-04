@@ -124,7 +124,7 @@ fun Scan(scanViewModel: ScanViewModel) {
 				fontSize = 22.sp
 			)
 
-			HorizontalDivider(
+			Divider(
 				modifier = Modifier.padding(16.dp),
 				thickness = 1.dp
 			)
@@ -147,7 +147,7 @@ fun Scan(scanViewModel: ScanViewModel) {
 				fontSize = 22.sp
 			)
 
-			HorizontalDivider(
+			Divider(
 				modifier = Modifier.padding(16.dp),
 				thickness = 1.dp
 			)
@@ -159,7 +159,7 @@ fun Scan(scanViewModel: ScanViewModel) {
 				lineHeight = 30.sp,
 			)
 
-			HorizontalDivider(
+			Divider(
 				thickness = 1.dp
 			)
 
@@ -189,7 +189,7 @@ fun Scan(scanViewModel: ScanViewModel) {
 				)
 			}
 
-			HorizontalDivider(
+			Divider(
 				thickness = 1.dp
 			)
 			Row(
