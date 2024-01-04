@@ -11,6 +11,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 fun ProductActivity() {
 	val viewModel = hiltViewModel<ProductViewModel>()
 	val isLoading by viewModel.isLoading.collectAsState()
+	val isSearching by viewModel.isSearching.collectAsState()
 	val isNextPageLoading by viewModel.isNextPageLoading.collectAsState()
 	val hasMoreProducts by viewModel.hasMoreProducts.collectAsState()
 	val errorMessage by viewModel.errorMessage.collectAsState()
@@ -27,9 +28,10 @@ fun ProductActivity() {
 	) { paddingValues ->
 		Column(Modifier.padding(paddingValues)) {
 			when {
-				isLoading -> ProductLoadingBox()
+				isLoading && !isSearching -> ProductLoadingBox()
+				isLoading && isSearching -> ProductLoadingComponent()
 
-				!isLoading && products.isEmpty() && errorMessage == null -> ProductEmptyBox("No products available.")
+				products.isEmpty() && !isSearching && errorMessage == null -> ProductEmptyBox("No products found")
 
 				errorMessage != null -> ProductEmptyBox(errorMessage!!)
 

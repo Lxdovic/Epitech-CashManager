@@ -1,6 +1,5 @@
 package com.example.moulamanagerclient.ui.product
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.moulamanagerclient.data.model.Pagination
 import com.example.moulamanagerclient.data.model.product.ProductResponse
@@ -8,9 +7,12 @@ import com.example.moulamanagerclient.data.network.ApiResult
 import com.example.moulamanagerclient.data.repositories.products.ProductRepository
 import com.example.moulamanagerclient.shared.AppConstants
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -25,6 +27,9 @@ constructor(
 
 	private val _isNextPageLoading: MutableStateFlow<Boolean> = MutableStateFlow(false)
 	val isNextPageLoading: StateFlow<Boolean> = _isNextPageLoading
+
+	private val _isSearching: MutableStateFlow<Boolean> = MutableStateFlow(false)
+	val isSearching: StateFlow<Boolean> = _isSearching
 
 	private val _products: MutableStateFlow<List<ProductResponse>> = MutableStateFlow(emptyList())
 	val products: StateFlow<List<ProductResponse>> = _products
@@ -58,6 +63,7 @@ constructor(
 	}
 
 	fun searchProducts(query: String = "") = viewModelScope.launch {
+		_isSearching.value = true
 		// If the user clears the search bar, we reset the state of the list and fetch the products
 		if (query.isBlank()) {
 			resetState()
@@ -71,11 +77,15 @@ constructor(
 		handleApiResult(result)
 
 		_isLoading.value = false
+		_isSearching.value = false
 	}
 
 	fun loadMoreProducts() = viewModelScope.launch {
 		if (_hasMoreProducts.value && !_isNextPageLoading.value) {
+			_isNextPageLoading.value = true
 			getProducts()
+			_isNextPageLoading.value = false
+
 		}
 	}
 
@@ -90,12 +100,9 @@ constructor(
 			return
 		}
 
-		_isNextPageLoading.value = true
-
 		val result = productRepository.getProducts(currentPage, AppConstants.DEFAULT_PAGE_SIZE)
 		handleApiResult(result)
 
-		_isNextPageLoading.value = false
 		_isLoading.value = false
 	}
 

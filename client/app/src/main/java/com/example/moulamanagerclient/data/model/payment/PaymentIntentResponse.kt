@@ -13,6 +13,4 @@ data class PaymentIntentResponse(
 	val ephemeralKey: String,
 	@Json(name = "clientId")
 	val clientId: String,
-	@Json(name = "publishableKey")
-	val publishableKey: String,
 )
