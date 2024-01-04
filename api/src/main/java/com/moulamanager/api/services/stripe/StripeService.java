@@ -30,9 +30,6 @@ public class StripeService {
     @Value("${stripe.secret.key}")
     private String stripeSecretKey;
 
-    @Value("${stripe.public.key}")
-    private String publishableKey;
-
     public StripeService(CustomerService customerService, UserService userService, CartItemService cartItemService) {
         this.customerService = customerService;
         this.userService = userService;
@@ -50,7 +47,7 @@ public class StripeService {
         PaymentIntentCreateParams params = createPaymentIntentParams(user, amountInCents, currency);
         PaymentIntent paymentIntent = PaymentIntent.create(params);
         EphemeralKey ephemeralKey = createEphemeralKey(paymentIntent.getCustomer());
-        return PaymentIntentResultDTO.fromPaymentIntent(paymentIntent, ephemeralKey.getSecret(), publishableKey);
+        return PaymentIntentResultDTO.fromPaymentIntent(paymentIntent, ephemeralKey.getSecret());
     }
 
     private EphemeralKey createEphemeralKey(String customerId) throws StripeException {

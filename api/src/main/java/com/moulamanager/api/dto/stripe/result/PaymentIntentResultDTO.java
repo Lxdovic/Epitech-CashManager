@@ -11,15 +11,13 @@ public class PaymentIntentResultDTO {
     private String clientSecret;
     private String ephemeralKey;
     private String clientId;
-    private String publishableKey;
 
-    public static PaymentIntentResultDTO fromPaymentIntent(PaymentIntent paymentIntent, String ephemeralKey, String publishableKey) {
+    public static PaymentIntentResultDTO fromPaymentIntent(PaymentIntent paymentIntent, String ephemeralKey) {
         return PaymentIntentResultDTO.builder()
                 .paymentIntentId(paymentIntent.getId())
                 .clientSecret(paymentIntent.getClientSecret())
                 .ephemeralKey(ephemeralKey)
                 .clientId(paymentIntent.getCustomer())
-                .publishableKey(publishableKey)
                 .build();
     }
 }
