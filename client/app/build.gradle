@@ -6,6 +6,11 @@ plugins {
     id("com.google.dagger.hilt.android")
 }
 
+// Load local.properties file
+def localProperties = new Properties()
+localProperties.load(new FileInputStream(rootProject.file("local.properties") as File))
+def STRIPE_PUBLISHABLE_KEY = localProperties.getProperty('stripe.publishable.key')
+
 android {
     namespace 'com.example.moulamanagerclient'
     compileSdk 34
@@ -24,6 +29,8 @@ android {
         kotlin {
             jvmToolchain(17)
         }
+
+        buildConfigField 'String', 'STRIPE_PUBLISHABLE_KEY', STRIPE_PUBLISHABLE_KEY
     }
 
     buildTypes {
@@ -39,6 +46,7 @@ android {
     buildFeatures {
         compose true
         viewBinding = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion '1.4.3'
@@ -95,9 +103,6 @@ dependencies {
     // compose navigation
     implementation "androidx.navigation:navigation-compose:2.7.6"
     implementation "androidx.hilt:hilt-navigation-compose:1.1.0"
-
-    // dotenv
-    implementation 'io.github.cdimascio:dotenv-kotlin:6.4.1'
 
     // ViewModel
     implementation "androidx.compose.runtime:runtime:${version_androidx_compose}"
