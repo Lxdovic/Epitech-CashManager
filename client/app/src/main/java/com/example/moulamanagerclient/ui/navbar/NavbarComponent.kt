@@ -1,7 +1,9 @@
 package com.example.moulamanagerclient.ui.navbar
 
+import androidx.compose.foundation.Image
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.painterResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.moulamanagerclient.shared.AppRoutes
@@ -15,6 +17,10 @@ fun NavbarComponent(
 	NavigationBar {
 		navViewModel.items.forEachIndexed { index, item ->
 			NavigationBarItem(
+				colors = NavigationBarItemDefaults
+					.colors(
+						indicatorColor = MaterialTheme.colorScheme.surfaceColorAtElevation(LocalAbsoluteTonalElevation.current)
+					),
 				selected = navViewModel.selectedItemIndex.intValue == index,
 				onClick = {
 					navViewModel.selectedItemIndex.intValue = index
@@ -23,9 +29,6 @@ fun NavbarComponent(
 					} else {
 						navController.navigate(item.route)
 					}
-				},
-				label = {
-					Text(text = item.title)
 				},
 				icon = {
 					BadgedBox(
@@ -41,12 +44,18 @@ fun NavbarComponent(
 							}
 						}
 					) {
-						Icon(
-							imageVector = if (navViewModel.selectedItemIndex.intValue == index) item.selectedIcon else item.unselectedIcon,
-							contentDescription = item.title,
+						Image(
+							painter = painterResource(
+								id = if (navViewModel.selectedItemIndex.intValue == index) {
+									item.selectedIcon
+								} else {
+									item.unselectedIcon
+								}
+							),
+							contentDescription = item.title
 						)
 					}
-				}
+				},
 			)
 		}
 	}
