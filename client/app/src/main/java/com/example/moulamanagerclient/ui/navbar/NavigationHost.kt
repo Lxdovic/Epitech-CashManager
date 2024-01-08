@@ -1,5 +1,6 @@
 package com.example.moulamanagerclient.ui.navbar
 
+import ScanComponent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -14,7 +15,6 @@ import com.example.moulamanagerclient.shared.AppRoutes
 import com.example.moulamanagerclient.ui.auth.login.LoginActivity
 import com.example.moulamanagerclient.ui.auth.register.RegisterActivity
 import com.example.moulamanagerclient.ui.product.ProductActivity
-import com.example.moulamanagerclient.ui.scan.ScanComponent
 
 @Composable
 fun NavigationHost(navigationController: NavHostController, authInterceptor: AuthInterceptor) {

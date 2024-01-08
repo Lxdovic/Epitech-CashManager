@@ -14,7 +14,6 @@ class BarcodeAnalyzer(private val context: Context, private var scanViewModel: S
         .setBarcodeFormats(Barcode.FORMAT_EAN_13)
         .build()
 
-//    private lateinit var toast: Toast
     private val scanner = BarcodeScanning.getClient(options)
 
     @SuppressLint("UnsafeOptInUsageError")
@@ -25,17 +24,13 @@ class BarcodeAnalyzer(private val context: Context, private var scanViewModel: S
                     image, imageProxy.imageInfo.rotationDegrees
                 )
             ).addOnSuccessListener { barcode ->
-
                 barcode?.takeIf { it.isNotEmpty() }
                     ?.mapNotNull { it.rawValue }
                     ?.joinToString(",")
                     ?.let {
-//                        if (::toast.isInitialized) { toast.cancel() }
-
-                        scanViewModel.setEan(it)
-
-//                        toast = Toast.makeText(context, it, Toast.LENGTH_SHORT)
-//                        toast.show()
+                        if (scanViewModel.getEan() != it) {
+                            scanViewModel.setEan(it)
+                        }
                     }
             }.addOnCompleteListener {
                 imageProxy.close()
