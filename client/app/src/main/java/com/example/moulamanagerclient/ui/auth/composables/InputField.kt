@@ -27,10 +27,12 @@ fun InputField(
 
 	OutlinedTextField(
 		colors = OutlinedTextFieldDefaults.colors(
-			focusedBorderColor = colorResource(id = R.color.black_4),
-			unfocusedBorderColor = colorResource(id = R.color.black_4),
-			focusedTextColor = colorResource(id = R.color.white),
-			unfocusedTextColor = colorResource(id = R.color.white),
+			unfocusedBorderColor = MaterialTheme.colorScheme.primaryContainer,
+			focusedBorderColor = MaterialTheme.colorScheme.onBackground,
+			focusedTextColor = MaterialTheme.colorScheme.onPrimary,
+			cursorColor = MaterialTheme.colorScheme.onBackground,
+			unfocusedLabelColor = MaterialTheme.colorScheme.onPrimary,
+			focusedLabelColor = MaterialTheme.colorScheme.onBackground,
 		),
 		modifier = Modifier
 			.fillMaxWidth()
